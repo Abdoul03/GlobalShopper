@@ -43,4 +43,8 @@ public abstract class Utilisateur {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @ManyToOne
+    @JoinColumn(name = "idPays")
+    private Pays pays;
 }
