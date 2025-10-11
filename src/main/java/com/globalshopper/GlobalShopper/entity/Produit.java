@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Produit {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private String nom;
@@ -27,12 +27,12 @@ public class Produit {
     private int stock;
 
     @ManyToOne
-    @JoinColumn(name = "id_supplier")
-    private Supplier supplier;
+    @JoinColumn(name = "id_fournisseur")
+    private Fournisseur fournisseur;
 
     @ManyToMany
-    @JoinTable(name = "produit_commercant", joinColumns= @JoinColumn(name = "id_produit"), inverseJoinColumns = @JoinColumn(name = "id_trader"))
-    private List<Trader> trader;
+    @JoinTable(name = "produit_commercant", joinColumns= @JoinColumn(name = "id_produit"), inverseJoinColumns = @JoinColumn(name = "id_commercant"))
+    private List<Commercant> commercant;
 
     @ManyToOne
     @JoinColumn(name = "id_categorie")

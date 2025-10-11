@@ -16,7 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class Categorie {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private String nom;

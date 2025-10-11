@@ -10,7 +10,5 @@ import lombok.Setter;
 @Entity
 @Setter
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
 public class Admin extends Utilisateur{
 }

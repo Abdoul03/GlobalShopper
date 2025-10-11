@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Supplier extends Utilisateur {
+public class Fournisseur extends Utilisateur {
 
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL)
     private List<Produit> produit;

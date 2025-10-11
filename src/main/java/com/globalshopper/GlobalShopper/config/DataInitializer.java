@@ -4,6 +4,7 @@ import com.globalshopper.GlobalShopper.entity.Admin;
 import com.globalshopper.GlobalShopper.entity.enums.Role;
 import com.globalshopper.GlobalShopper.repository.AdminRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -15,18 +16,16 @@ public class DataInitializer {
 
     @Value("${admin_username}")
     String userName;
-    @Value("${Admin_email}")
+    @Value("${admin_email}")
     String email;
     @Value("${admin_password}")
     String password;
 
-    private final AdminRepository adminRepository;
-    private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private  AdminRepository adminRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    public DataInitializer(AdminRepository adminRepository, PasswordEncoder passwordEncoder) {
-        this.adminRepository = adminRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @Bean
     @Transactional

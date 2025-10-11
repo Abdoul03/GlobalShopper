@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Pays {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String nom;
 
