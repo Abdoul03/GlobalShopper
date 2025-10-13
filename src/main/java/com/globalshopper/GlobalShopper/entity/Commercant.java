@@ -3,6 +3,7 @@ package com.globalshopper.GlobalShopper.entity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,4 +20,8 @@ public class Commercant extends Utilisateur {
 
     @ManyToMany(mappedBy = "trader" , cascade = CascadeType.ALL)
     private List<Produit> produits;
+
+    @OneToMany(mappedBy = "commercant", cascade = CascadeType.ALL)
+    private List<Participation> participation;
+
 }

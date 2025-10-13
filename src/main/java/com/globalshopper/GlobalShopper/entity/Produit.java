@@ -37,4 +37,7 @@ public class Produit {
     @ManyToOne
     @JoinColumn(name = "id_categorie")
     private Categorie categorie;
+
+    @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL)
+    private List<CommandeGroupee> commandeGroupees;
 }
