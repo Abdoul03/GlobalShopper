@@ -1,5 +1,6 @@
 package com.globalshopper.GlobalShopper.config;
 
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,6 +10,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -17,7 +19,12 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 public class SecurityConfig {
+
+    private final JwtFilter jwtFilter;
+    private final JwtEntryPoint jwtEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain (HttpSecurity httpSecurity, CorsConfigurationSource corsConfigurationSource) throws Exception {
@@ -35,7 +42,11 @@ public class SecurityConfig {
                                     .requestMatchers("/trader/**").hasRole("COMMERCANT")
                                     .anyRequest().authenticated();
 
-                }).build();
+                }).exceptionHandling(exception ->{
+                    exception.authenticationEntryPoint(jwtEntryPoint).accessDeniedHandler(jwtAccessDeniedHandler);
+                })
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 
     @Bean
