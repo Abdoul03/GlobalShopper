@@ -1,23 +1,21 @@
 package com.globalshopper.GlobalShopper.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface CrudRepository <T, ID> {
-    // Ajouter une entité
-    T ajout(T entity);
+public interface CrudRepository <REQ, RES, ID> {
+    // Add entity
+    RES create(REQ dto);
 
-    // Liste toutes les entités
-    List<T> liste();
+    // Get all entity
+    List<RES> getAll();
 
-    // Trouver une entité par son ID
-    Optional<T> trouverParId(ID id);
+    // Get entity by id
+    RES getById(ID id);
 
-    // Mettre à jour une entité existante
-    T miseAJour(T entity, ID id);
+    // Update entity
+    RES update(ID id, REQ dto);
 
-    // Supprimer une entité par son ID
-    void supprimer(ID id);
+    // Delete entity
+    void delete(ID id);
 }

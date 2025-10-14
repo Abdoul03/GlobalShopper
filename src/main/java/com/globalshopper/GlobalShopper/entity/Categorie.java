@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -20,7 +19,6 @@ public class Categorie {
     private long id;
 
     private String nom;
-    private String description;
 
     @OneToMany(mappedBy = "categorie", cascade = CascadeType.ALL)
     private Set<Produit> produit;
