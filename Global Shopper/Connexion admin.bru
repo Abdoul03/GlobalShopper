@@ -1,0 +1,22 @@
+meta {
+  name: Connexion admin
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8080/api/auth/login
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "username" : "doul03",
+    "motDePasse": "Naruto03"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

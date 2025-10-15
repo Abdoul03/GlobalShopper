@@ -23,7 +23,9 @@ public class Transaction {
     private long id;
 
     private int montant;
+    @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
+    @Enumerated(EnumType.STRING)
     private MethodeDePayement methodeDePayement;
 
     private LocalDate date;
@@ -35,5 +37,9 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name = "wallet_id")
     private Wallet wallet;
+
+    @ManyToOne
+    @JoinColumn(name = "fournisser_id")
+    private Fournisseur fournisseur;
 
 }

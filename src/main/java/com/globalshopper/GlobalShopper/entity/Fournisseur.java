@@ -15,7 +15,9 @@ import java.util.List;
 @NoArgsConstructor
 public class Fournisseur extends Utilisateur {
 
-    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "fournisseur", cascade = CascadeType.ALL)
     private List<Produit> produit;
 
+    @OneToMany(mappedBy = "fournisseur", cascade = CascadeType.ALL)
+    private List<Transaction> transactions;
 }

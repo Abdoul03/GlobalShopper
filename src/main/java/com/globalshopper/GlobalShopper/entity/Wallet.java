@@ -23,8 +23,9 @@ public class Wallet {
 
     private int montant;
     private LocalDate miseAjour;
+    @Enumerated(EnumType.STRING)
     private Statut statut;
 
-    @OneToMany(mappedBy = "transaction_id", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL)
     private List<Transaction> transactions;
 }

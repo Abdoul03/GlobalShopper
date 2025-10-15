@@ -1,6 +1,7 @@
 package com.globalshopper.GlobalShopper.entity;
 
 
+import com.globalshopper.GlobalShopper.entity.enums.UniteProduit;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,14 +26,12 @@ public class Produit {
     private String urlPhoto;
     private int moq;
     private int stock;
+    @Enumerated(EnumType.STRING)
+    private UniteProduit unite;
 
     @ManyToOne
     @JoinColumn(name = "id_fournisseur")
     private Fournisseur fournisseur;
-
-    @ManyToMany
-    @JoinTable(name = "produit_commercant", joinColumns= @JoinColumn(name = "id_produit"), inverseJoinColumns = @JoinColumn(name = "id_commercant"))
-    private List<Commercant> commercant;
 
     @ManyToOne
     @JoinColumn(name = "id_categorie")

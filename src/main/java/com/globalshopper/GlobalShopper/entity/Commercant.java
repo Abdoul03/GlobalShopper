@@ -18,9 +18,6 @@ import java.util.List;
 @NoArgsConstructor
 public class Commercant extends Utilisateur {
 
-    @ManyToMany(mappedBy = "trader" , cascade = CascadeType.ALL)
-    private List<Produit> produits;
-
     @OneToMany(mappedBy = "commercant", cascade = CascadeType.ALL)
     private List<Participation> participation;
 

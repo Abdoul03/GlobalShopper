@@ -1,8 +1,8 @@
 package com.globalshopper.GlobalShopper.entity.enums;
 
 public enum OrderStatus {
-    EN_COURS,
-    VALIDER,
+    ENCOURS,
+    EXPEDIER,
+    TERMINER,
     ANNULER,
-    LIVRER,
 }

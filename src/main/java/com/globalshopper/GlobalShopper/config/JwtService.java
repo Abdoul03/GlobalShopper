@@ -3,26 +3,39 @@ package com.globalshopper.GlobalShopper.config;
 import com.globalshopper.GlobalShopper.entity.enums.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+//import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.security.Key;
-import java.security.PublicKey;
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
+//import java.security.Key;
+//import java.security.PublicKey;
 import java.time.Instant;
+import java.util.Base64;
 import java.util.Date;
 
 @Service
 public class JwtService {
 
+    @Value("${jwt.secret-key}")
+    private String jwtSecret;
+    private SecretKey secretKey;
 
-    private final Key jwtSecretkey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    //private final Key jwtSecretkey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     //private String secretKey;
 
     private final long accessTokenValidity = 15L * 60L * 1000L ;
     @Getter
     private final long refreshTokenValidity = 30L * 24L * 60L * 60L * 1000L;
+
+    @PostConstruct
+    void init() {
+        this.secretKey = Keys.hmacShaKeyFor(Base64.getDecoder().decode(jwtSecret.getBytes(StandardCharsets.UTF_8)));
+    }
 
     private String generateToken(Long userId, TokenType tokenType, long expireAt, Role userRole){
         Date now = Date.from(Instant.now());
@@ -34,7 +47,7 @@ public class JwtService {
                 .claim("type", userRole)
                 .issuedAt(now)
                 .expiration(expiration)
-                .signWith(jwtSecretkey)
+                .signWith(secretKey, Jwts.SIG.HS256)
                 .compact();
 
     }
@@ -78,7 +91,7 @@ public class JwtService {
         String rawToken = token.startsWith("Bearer ") ? token.substring(7) : token;
 
         return Jwts.parser()
-                .verifyWith((PublicKey) jwtSecretkey)
+                .verifyWith(secretKey)
                 .build()
                 .parseSignedClaims(rawToken)
                 .getPayload();
