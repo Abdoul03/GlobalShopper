@@ -34,7 +34,7 @@ public class CommercantController {
         return ResponseEntity.ok(commercantService.updateCommercant(id, commercant));
     }
 
-    @DeleteMapping("{/id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteCommercant(@PathVariable long id){
         return ResponseEntity.ok(commercantService.deleteCommercant(id));
     }
