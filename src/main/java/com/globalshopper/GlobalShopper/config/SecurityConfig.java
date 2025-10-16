@@ -38,8 +38,8 @@ public class SecurityConfig {
                                     .requestMatchers("/users/me/**").permitAll()
                                     .requestMatchers("/admin/**").hasRole("ADMIN")
                                     .requestMatchers("/utilisateur/**").hasRole("ADMIN")
-                                    .requestMatchers("/fournisseur/**").hasRole("FOURNISSEUR")
-                                    .requestMatchers("/commercant/**").hasRole("COMMERCANT")
+                                    .requestMatchers("/fournisseur/**").hasAnyRole("FOURNISSEUR","ADMIN")
+                                    .requestMatchers("/commercant/**").hasAnyRole("COMMERCANT","ADMIN")
                                     .anyRequest().authenticated();
 
                 }).exceptionHandling(exception ->{
