@@ -1,0 +1,19 @@
+meta {
+  name: Refresh token
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/auth/refresh
+  body: json
+  auth: none
+}
+
+body:json {
+  eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwidHlwZSI6IlJFRlJFU0hfVE9LRU4iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjA2MDk4NzQsImV4cCI6MTc2MzIwMTg3NH0.bmb9KY3nLKuJZ04DZypCNOxgVO4aOP4z8D-Gedepzaw
+}
+
+settings {
+  encodeUrl: true
+}

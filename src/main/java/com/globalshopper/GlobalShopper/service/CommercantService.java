@@ -25,7 +25,7 @@ public class CommercantService {
     public CommercantResponseDTO inscription (CommercantRequestDTO commercant){
         Commercant commer = CommercantMapp.toEntity(commercant, new Commercant());
         commer.setActif(true);
-        commer.setRole(Role.COMMERCANT);
+        commer.setRole(Role.ROLE_COMMERCANT);
         commer.setMotDePasse(passwordEncoder.encode(commercant.motDePasse()));
         commercantRepository.save(commer);
         return CommercantMapp.toResponse(commer);

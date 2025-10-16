@@ -1,27 +1,23 @@
 meta {
   name: inscription Commercant
   type: http
-  seq: 4
+  seq: 5
 }
 
-get {
-  url: http://localhost:8080/api/auth/commercant/register
+post {
+  url: {{baseUrl}}/auth/commercant/register
   body: json
-  auth: bearer
-}
-
-auth:bearer {
-  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwidHlwZSI6IkFETUlOIiwiaWF0IjoxNzYwNTYwMDI3LCJleHAiOjE3NjA1NjA5Mjd9.oR2VkMxRJ-D0HaupiANUjBuuU3UpFJo4QnbLG_6Q2pI
+  auth: none
 }
 
 body:json {
   {
-    "nom":"",
-    "prenom":"",
-    "username":"",
-    "telephone":"",
-    "email":"",
-    "motDePasse":""
+    "nom":"Samaké",
+    "prenom":"Abdoul Ibrahima",
+    "username":"Abdoul",
+    "telephone":"71267813",
+    "email":"samabdoul03@gmail.com",
+    "motDePasse":"azerty"
   }
 }
 

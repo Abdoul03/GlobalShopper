@@ -53,14 +53,14 @@ public class AuthentificationService {
     @Transactional
     public TokenPairResponse refresh(String refreshToken) {
         if (!jwtService.isTokenRefreshValid(refreshToken)) {
-            throw new JwtException("");
+            throw new JwtException("Invalid refresh token.");
         }
         Long userId = jwtService.getUserIdFromToken(refreshToken);
         Utilisateur user = userRepository.findById(userId).orElseThrow(() -> new JwtException("Utilisateur introuvable."));
 
         String hashedToken = hashToken(refreshToken);
         refreshTokenRepository.findByUserIdAndToken(user.getId(), hashedToken)
-                .orElseThrow(() -> new JwtException(""));
+                .orElseThrow(() -> new JwtException("Refresh token introuvable."));
 
         String newAccessToken = jwtService.generateAccessToken(user.getId(), user.getRole());
         String newRefreshToken = jwtService.generateRefreshToken(user.getId(), user.getRole());

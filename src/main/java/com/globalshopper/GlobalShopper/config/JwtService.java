@@ -44,7 +44,7 @@ public class JwtService {
         return Jwts.builder()
                 .subject(userId.toString())
                 .claim("type", tokenType.name())
-                .claim("type", userRole)
+                .claim("role", userRole)
                 .issuedAt(now)
                 .expiration(expiration)
                 .signWith(secretKey, Jwts.SIG.HS256)
@@ -67,8 +67,10 @@ public class JwtService {
     }
     public boolean isTokenRefreshValid(String refreshToken){
         Claims claims = parseAllClaims(refreshToken);
+        System.out.println("Avant claims");
         if (claims == null) return false;
         String type = (String) claims.get("type");
+        System.out.println(type);
         return TokenType.REFRESH_TOKEN.name().equals(type);
     }
     public Long getUserIdFromToken(String token) {

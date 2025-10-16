@@ -1,7 +1,7 @@
 package com.globalshopper.GlobalShopper.entity.enums;
 
 public enum Role {
-    ADMIN,
-    COMMERCANT,
-    FOURNISSEUR
+    ROLE_ADMIN,
+    ROLE_COMMERCANT,
+    ROLE_FOURNISSEUR
 }

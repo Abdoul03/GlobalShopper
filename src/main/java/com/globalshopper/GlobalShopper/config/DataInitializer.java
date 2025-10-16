@@ -40,7 +40,7 @@ public class DataInitializer {
                 admin.setEmail(email);
                 admin.setMotDePasse(passwordEncoder.encode(password));
                 admin.setActif(true);
-                admin.setRole(Role.ADMIN);
+                admin.setRole(Role.ROLE_ADMIN);
 
                 adminRepository.save(admin);
                 System.out.println("Admin par defaut créé ");

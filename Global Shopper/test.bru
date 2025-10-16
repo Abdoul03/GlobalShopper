@@ -1,0 +1,19 @@
+meta {
+  name: test
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/admin/test
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwidHlwZSI6IkFETUlOIiwiaWF0IjoxNzYwNjA4ODI4LCJleHAiOjE3NjA2MDk3Mjh9.IgVobVFspTDGFBi-hL4gFgOuQpoZccICZwiQu6OFluA
+}
+
+settings {
+  encodeUrl: true
+}
