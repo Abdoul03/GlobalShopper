@@ -6,6 +6,7 @@ import com.globalshopper.GlobalShopper.entity.Admin;
 import com.globalshopper.GlobalShopper.entity.Pays;
 import com.globalshopper.GlobalShopper.service.AdminService;
 import com.globalshopper.GlobalShopper.service.PaysService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,13 +14,29 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/admin")
-public class AdminContrroller extends GenericCrudController<Admin,Long, UtilisateurRequestDTO, UtilisateurResponseDTO>{
+public class AdminContrroller {
+
+    private final AdminService adminService;
     private final PaysService paysService;
 
-    public AdminContrroller(AdminService adminService,PaysService paysService) {
-        super(adminService);
-        this.paysService = paysService;
+    @PostMapping
+    public ResponseEntity<Admin> addAdministrateur(@RequestBody Admin admin){
+        return ResponseEntity.status(HttpStatus.CREATED).body(adminService.creatAdmin(admin));
+    }
+    @GetMapping
+    public ResponseEntity<List<Admin>> getAllAdmin(){
+        return ResponseEntity.ok(adminService.getAllAdmin());
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<Admin> getadm(@PathVariable Long id){
+        return ResponseEntity.ok(adminService.getAAdmin(id));
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAdmin(@PathVariable Long id){
+        adminService.deleteAdmin(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/pays")

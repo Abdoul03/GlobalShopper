@@ -3,16 +3,16 @@ package com.globalshopper.GlobalShopper.controller;
 import com.globalshopper.GlobalShopper.auth.AuthentificationService;
 import com.globalshopper.GlobalShopper.dto.AuthRequest;
 import com.globalshopper.GlobalShopper.dto.request.CommercantRequestDTO;
+import com.globalshopper.GlobalShopper.dto.request.FournisseurRequestDTO;
 import com.globalshopper.GlobalShopper.dto.response.CommercantResponseDTO;
+import com.globalshopper.GlobalShopper.dto.response.FournisseurResponseDTO;
 import com.globalshopper.GlobalShopper.service.CommercantService;
+import com.globalshopper.GlobalShopper.service.FournisseurService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
 @RestController
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private AuthentificationService authentificationService;
     private CommercantService commercantService;
+    private FournisseurService fournisseurService;
 
     @PostMapping("/login")
     public ResponseEntity<AuthentificationService.TokenPairResponse> login(
@@ -40,5 +41,10 @@ public class AuthController {
     @PostMapping("/commercant/register")
     public ResponseEntity<CommercantResponseDTO> inscription (@RequestBody CommercantRequestDTO commercant){
         return ResponseEntity.status(HttpStatus.CREATED).body(commercantService.inscription(commercant));
+    }
+
+    @PostMapping("/fournisseur/register")
+    public ResponseEntity<FournisseurResponseDTO> incription (@RequestBody FournisseurRequestDTO fournisseur){
+        return ResponseEntity.status(HttpStatus.CREATED).body(fournisseurService.CreatFournisseur(fournisseur));
     }
 }

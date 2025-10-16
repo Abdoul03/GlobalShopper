@@ -1,0 +1,23 @@
+meta {
+  name: Get All Contry
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}/admin/pays
+  body: json
+  auth: bearer
+}
+
+headers {
+  Authorization: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwidHlwZSI6IkFETUlOIiwiaWF0IjoxNzYwNjA2NTQ1LCJleHAiOjE3NjA2MDc0NDV9.EiqEmto1RsuFsMoaPz94fHufYd_vQq1xnTUBqB1IcPQ
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwidHlwZSI6IkFDQ0VTU19UT0tFTiIsInJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzYwNjEwMDE1LCJleHAiOjE3NjA2MTA5MTV9.UsAw6b8B6uhhIctxXdiNeGKjiIix1D8fbvIsgELnzGI
+}
+
+settings {
+  encodeUrl: true
+}

@@ -1,0 +1,19 @@
+meta {
+  name: GetAllAdmin
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{baseUrl}}/admin
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwidHlwZSI6IkFDQ0VTU19UT0tFTiIsInJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzYwNjE4NjczLCJleHAiOjE3NjA2MTk1NzN9.-1Os2MaBUyoCqyi0-7iwsn__22tLjZlOBQFx2CpCAW0
+}
+
+settings {
+  encodeUrl: true
+}

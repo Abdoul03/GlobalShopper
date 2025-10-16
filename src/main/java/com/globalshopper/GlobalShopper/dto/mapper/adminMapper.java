@@ -7,4 +7,5 @@ import com.globalshopper.GlobalShopper.repository.CrudMapper;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface AdminMapper extends CrudMapper<Admin, UtilisateurRequestDTO, UtilisateurResponseDTO> {}
+public interface adminMapper extends CrudMapper<Admin, UtilisateurRequestDTO, UtilisateurResponseDTO> {
+}
