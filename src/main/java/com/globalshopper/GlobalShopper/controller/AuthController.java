@@ -14,13 +14,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@AllArgsConstructor
 @RestController
 @RequestMapping("auth")
 public class AuthController {
+
     private AuthentificationService authentificationService;
     private CommercantService commercantService;
     private FournisseurService fournisseurService;
+
+    public AuthController(AuthentificationService authentificationService, CommercantService commercantService, FournisseurService fournisseurService) {
+        this.authentificationService = authentificationService;
+        this.commercantService = commercantService;
+        this.fournisseurService = fournisseurService;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<AuthentificationService.TokenPairResponse> login(

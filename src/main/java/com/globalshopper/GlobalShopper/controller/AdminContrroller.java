@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@AllArgsConstructor
 @RequestMapping("/admin")
 public class AdminContrroller {
+    public AdminContrroller(AdminService adminService) {
+        this.adminService = adminService;
+    }
 
     private final AdminService adminService;
 

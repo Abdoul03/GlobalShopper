@@ -29,8 +29,12 @@ public class JwtService {
     //private String secretKey;
 
     private final long accessTokenValidity = 15L * 60L * 1000L ;
-    @Getter
+    //@Getter
     private final long refreshTokenValidity = 30L * 24L * 60L * 60L * 1000L;
+
+    public long getRefreshTokenValidity() {
+        return refreshTokenValidity;
+    }
 
     @PostConstruct
     void init() {
@@ -98,7 +102,6 @@ public class JwtService {
                 .parseSignedClaims(rawToken)
                 .getPayload();
     }
-
 
     private enum TokenType {
         ACCESS_TOKEN,

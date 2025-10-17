@@ -7,11 +7,22 @@ import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 @Entity
 public class RefreshToken {
+
+    public RefreshToken(Long id, Utilisateur user, Instant createdAt, Instant expiresAt, String token) {
+        this.id = id;
+        this.user = user;
+        this.createdAt = createdAt;
+        this.expiresAt = expiresAt;
+        this.token = token;
+    }
+
+    public RefreshToken(){
+        
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,4 +39,44 @@ public class RefreshToken {
 
     @Column(nullable = false)
     private String token;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Utilisateur getUser() {
+        return user;
+    }
+
+    public void setUser(Utilisateur user) {
+        this.user = user;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Instant getExpiresAt() {
+        return expiresAt;
+    }
+
+    public void setExpiresAt(Instant expiresAt) {
+        this.expiresAt = expiresAt;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 }

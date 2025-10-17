@@ -14,8 +14,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
 public class FournisseurService {
+    public FournisseurService(FournisseurRepository fournisseurRepository, PasswordEncoder passwordEncoder) {
+        this.fournisseurRepository = fournisseurRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
     private final FournisseurRepository fournisseurRepository;
     private final PasswordEncoder passwordEncoder;
 

@@ -9,8 +9,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
 public class PaysService {
+    public PaysService(PaysRepository paysRepository) {
+        this.paysRepository = paysRepository;
+    }
+
     private final PaysRepository paysRepository;
 
     public Pays addCountry(Pays pays){

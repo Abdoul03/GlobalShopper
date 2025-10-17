@@ -13,11 +13,22 @@ import java.time.LocalDate;
 
 
 @Entity
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class Transaction {
+
+    public Transaction(long id, int montant, TransactionType transactionType, MethodeDePayement methodeDePayement, LocalDate date, Participation participation, Wallet wallet, Fournisseur fournisseur) {
+        this.id = id;
+        this.montant = montant;
+        this.transactionType = transactionType;
+        this.methodeDePayement = methodeDePayement;
+        this.date = date;
+        this.participation = participation;
+        this.wallet = wallet;
+        this.fournisseur = fournisseur;
+    }
+    public Transaction(){
+
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -42,4 +53,67 @@ public class Transaction {
     @JoinColumn(name = "fournisser_id")
     private Fournisseur fournisseur;
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public int getMontant() {
+        return montant;
+    }
+
+    public void setMontant(int montant) {
+        this.montant = montant;
+    }
+
+    public TransactionType getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(TransactionType transactionType) {
+        this.transactionType = transactionType;
+    }
+
+    public MethodeDePayement getMethodeDePayement() {
+        return methodeDePayement;
+    }
+
+    public void setMethodeDePayement(MethodeDePayement methodeDePayement) {
+        this.methodeDePayement = methodeDePayement;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public Participation getParticipation() {
+        return participation;
+    }
+
+    public void setParticipation(Participation participation) {
+        this.participation = participation;
+    }
+
+    public Wallet getWallet() {
+        return wallet;
+    }
+
+    public void setWallet(Wallet wallet) {
+        this.wallet = wallet;
+    }
+
+    public Fournisseur getFournisseur() {
+        return fournisseur;
+    }
+
+    public void setFournisseur(Fournisseur fournisseur) {
+        this.fournisseur = fournisseur;
+    }
 }

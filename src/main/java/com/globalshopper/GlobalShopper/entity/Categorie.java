@@ -9,11 +9,17 @@ import lombok.Setter;
 import java.util.Set;
 
 @Entity
-@Setter
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
 public class Categorie {
+    public Categorie(long id, String nom, Set<Produit> produit) {
+        this.id = id;
+        this.nom = nom;
+        this.produit = produit;
+    }
+
+    public Categorie(){
+
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -22,4 +28,28 @@ public class Categorie {
 
     @OneToMany(mappedBy = "categorie", cascade = CascadeType.ALL)
     private Set<Produit> produit;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public Set<Produit> getProduit() {
+        return produit;
+    }
+
+    public void setProduit(Set<Produit> produit) {
+        this.produit = produit;
+    }
 }

@@ -16,8 +16,12 @@ import java.util.List;
 
 
 @Service
-@AllArgsConstructor
 public class CommercantService {
+
+    public CommercantService(CommercantRepository commercantRepository, PasswordEncoder passwordEncoder) {
+        this.commercantRepository = commercantRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     private final CommercantRepository commercantRepository;
     private final PasswordEncoder passwordEncoder;

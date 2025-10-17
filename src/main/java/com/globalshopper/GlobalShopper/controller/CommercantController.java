@@ -14,10 +14,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@AllArgsConstructor
 @RequestMapping("/commercant")
 public class CommercantController {
     private final CommercantService commercantService;
+
+    public CommercantController(CommercantService commercantService) {
+        this.commercantService = commercantService;
+    }
 
     @GetMapping
     public ResponseEntity<List<CommercantResponseDTO>> getAllCommercant () {

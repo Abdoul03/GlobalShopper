@@ -14,10 +14,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
 public class AdminService{
     private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
+
+    public AdminService(AdminRepository adminRepository, PasswordEncoder passwordEncoder) {
+        this.adminRepository = adminRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public Admin creatAdmin(Admin admin){
         Admin administrateur = new Admin();

@@ -10,10 +10,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@AllArgsConstructor
 public abstract class GenericCrudController<E,ID,REQ,RES> {
 
     private final GenericCrudService<E, ID, REQ, RES> genericCrudService;
+
+    public GenericCrudController(GenericCrudService<E, ID, REQ, RES> genericCrudService) {
+        this.genericCrudService = genericCrudService;
+    }
 
     @PostMapping
     public ResponseEntity<RES> add (@Valid @RequestBody REQ dto){

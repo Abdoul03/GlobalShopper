@@ -9,8 +9,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
 public class CategorieService {
+    public CategorieService(CategorieRepository repository) {
+        this.repository = repository;
+    }
+
     private final CategorieRepository repository;
 
     public Categorie createCategorie (Categorie categorie){

@@ -22,7 +22,6 @@ import java.time.Instant;
 import java.util.Base64;
 
 @Service
-@AllArgsConstructor
 public class AuthentificationService {
 
     private final JwtService jwtService;
@@ -30,6 +29,12 @@ public class AuthentificationService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final PasswordEncoder passwordEncoder;
 
+    public AuthentificationService(JwtService jwtService, UtilisateurRepository userRepository, RefreshTokenRepository refreshTokenRepository, PasswordEncoder passwordEncoder) {
+        this.jwtService = jwtService;
+        this.userRepository = userRepository;
+        this.refreshTokenRepository = refreshTokenRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public TokenPairResponse authenticate(AuthRequest authenticationRequest) {
         boolean isEmail = EmailValidator.getInstance().isValid(authenticationRequest.identifiant());

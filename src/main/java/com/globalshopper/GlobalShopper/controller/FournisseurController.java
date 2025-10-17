@@ -10,10 +10,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@AllArgsConstructor
 @RequestMapping("/fournisseur")
 public class FournisseurController {
     private FournisseurService fournisseurService;
+
+    public FournisseurController(FournisseurService fournisseurService) {
+        this.fournisseurService = fournisseurService;
+    }
 
     @GetMapping
     public ResponseEntity<List<FournisseurResponseDTO>> getAllFournisseur(){

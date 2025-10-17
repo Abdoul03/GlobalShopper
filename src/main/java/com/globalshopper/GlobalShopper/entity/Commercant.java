@@ -12,13 +12,24 @@ import lombok.Setter;
 import java.util.List;
 
 @Entity
-@Setter
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
 public class Commercant extends Utilisateur {
+
+    public Commercant(List<Participation> participation) {
+        this.participation = participation;
+    }
+
+    public Commercant(){
+
+    }
 
     @OneToMany(mappedBy = "commercant", cascade = CascadeType.ALL)
     private List<Participation> participation;
 
+    public List<Participation> getParticipation() {
+        return participation;
+    }
+
+    public void setParticipation(List<Participation> participation) {
+        this.participation = participation;
+    }
 }

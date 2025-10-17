@@ -19,12 +19,17 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@AllArgsConstructor
 public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
     private final JwtEntryPoint jwtEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+
+    public SecurityConfig(JwtFilter jwtFilter, JwtEntryPoint jwtEntryPoint, JwtAccessDeniedHandler jwtAccessDeniedHandler) {
+        this.jwtFilter = jwtFilter;
+        this.jwtEntryPoint = jwtEntryPoint;
+        this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain (HttpSecurity httpSecurity, CorsConfigurationSource corsConfigurationSource) throws Exception {

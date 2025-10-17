@@ -10,9 +10,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@AllArgsConstructor
 @RequestMapping("pays")
 public class PaysController {
+    public PaysController(PaysService paysService) {
+        this.paysService = paysService;
+    }
+
     private final PaysService paysService;
 
     @PostMapping
