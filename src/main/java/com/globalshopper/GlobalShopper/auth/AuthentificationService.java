@@ -9,6 +9,7 @@ import com.globalshopper.GlobalShopper.repository.UtilisateurRepository;
 import io.jsonwebtoken.JwtException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -31,8 +32,16 @@ public class AuthentificationService {
 
 
     public TokenPairResponse authenticate(AuthRequest authenticationRequest) {
-        Utilisateur userToAuthenticate = userRepository.findByUsername(authenticationRequest.username())
-                .orElseThrow(() -> new BadCredentialsException("Username ou mot de passe incorrect."));
+        boolean isEmail = EmailValidator.getInstance().isValid(authenticationRequest.identifiant());
+        Utilisateur userToAuthenticate ;
+
+        if (isEmail){
+            userToAuthenticate = userRepository.findByEmail(authenticationRequest.identifiant())
+                .orElseThrow(() -> new BadCredentialsException("Identifiant ou mot de passe incorrect."));
+        }else {
+             userToAuthenticate = userRepository.findByTelephone(authenticationRequest.identifiant())
+                    .orElseThrow(() -> new BadCredentialsException("Identifiant ou mot de passe incorrect."));
+        }
 
         if (BCrypt.checkpw(authenticationRequest.motDePasse(), userToAuthenticate.getMotDePasse())) {
             String newAccessToken = jwtService.generateAccessToken(
@@ -46,7 +55,7 @@ public class AuthentificationService {
             storeRefreshToken(userToAuthenticate.getId(), newRefreshToken);
             return new TokenPairResponse(newAccessToken, newRefreshToken);
         }
-        throw new BadCredentialsException("Username ou mot de passe incorrect.");
+        throw new BadCredentialsException(" Identifiant ou mot de passe incorrect.");
     }
 
 
