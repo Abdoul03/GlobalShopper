@@ -1,5 +1,6 @@
 package com.globalshopper.GlobalShopper.dto.request;
 
+import com.globalshopper.GlobalShopper.entity.Pays;
 import com.globalshopper.GlobalShopper.entity.enums.Role;
 
 public record FournisseurRequestDTO (
@@ -10,6 +11,7 @@ public record FournisseurRequestDTO (
         String email,
         String motDePasse,
         boolean actif,
-        Role role
+        Role role,
+        Pays pays
 ){
 }

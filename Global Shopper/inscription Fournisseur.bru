@@ -1,0 +1,27 @@
+meta {
+  name: inscription Fournisseur
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{baseUrl}}/auth/fournisseur/register
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nom":"Samaké",
+    "prenom":"Yacine Ibrahima",
+    "username":"yaci",
+    "telephone":"91530869",
+    "email":"yacineibrahimasamake@gmail.com",
+    "motDePasse":"azerty"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

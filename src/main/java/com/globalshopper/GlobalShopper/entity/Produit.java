@@ -12,23 +12,6 @@ import java.util.List;
 
 @Entity
 public class Produit {
-    public Produit(long id, String nom, String description, int prix, String urlPhoto, int moq, int stock, UniteProduit unite, Fournisseur fournisseur, Categorie categorie, List<CommandeGroupee> commandeGroupees) {
-        this.id = id;
-        this.nom = nom;
-        this.description = description;
-        this.prix = prix;
-        this.urlPhoto = urlPhoto;
-        this.moq = moq;
-        this.stock = stock;
-        this.unite = unite;
-        this.fournisseur = fournisseur;
-        this.categorie = categorie;
-        this.commandeGroupees = commandeGroupees;
-    }
-
-    public Produit(){
-
-    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -36,11 +19,16 @@ public class Produit {
     private String nom;
     private String description;
     private int prix;
-    private String urlPhoto;
     private int moq;
     private int stock;
     @Enumerated(EnumType.STRING)
     private UniteProduit unite;
+
+    @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL)
+    private List<Media> media;
+
+    @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL)
+    private List<Caracteristique> caracteristiques;
 
     @ManyToOne
     @JoinColumn(name = "id_fournisseur")
@@ -52,6 +40,25 @@ public class Produit {
 
     @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL)
     private List<CommandeGroupee> commandeGroupees;
+
+    public Produit(long id, String nom, String description, int prix, String urlPhoto, int moq, int stock, UniteProduit unite, Fournisseur fournisseur, Categorie categorie, List<CommandeGroupee> commandeGroupees, List<Media> media, List<Caracteristique> caracteristiques) {
+        this.id = id;
+        this.nom = nom;
+        this.description = description;
+        this.prix = prix;
+        this.moq = moq;
+        this.stock = stock;
+        this.unite = unite;
+        this.fournisseur = fournisseur;
+        this.categorie = categorie;
+        this.commandeGroupees = commandeGroupees;
+        this.media = media;
+        this.caracteristiques = caracteristiques;
+    }
+
+    public Produit(){
+
+    }
 
     public long getId() {
         return id;
@@ -83,14 +90,6 @@ public class Produit {
 
     public void setPrix(int prix) {
         this.prix = prix;
-    }
-
-    public String getUrlPhoto() {
-        return urlPhoto;
-    }
-
-    public void setUrlPhoto(String urlPhoto) {
-        this.urlPhoto = urlPhoto;
     }
 
     public int getMoq() {
@@ -139,5 +138,21 @@ public class Produit {
 
     public void setCommandeGroupees(List<CommandeGroupee> commandeGroupees) {
         this.commandeGroupees = commandeGroupees;
+    }
+
+    public List<Media> getMedia() {
+        return media;
+    }
+
+    public void setMedia(List<Media> media) {
+        this.media = media;
+    }
+
+    public List<Caracteristique> getCaracteristiques() {
+        return caracteristiques;
+    }
+
+    public void setCaracteristiques(List<Caracteristique> caracteristiques) {
+        this.caracteristiques = caracteristiques;
     }
 }

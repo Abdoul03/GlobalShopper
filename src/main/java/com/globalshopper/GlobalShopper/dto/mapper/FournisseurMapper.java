@@ -16,6 +16,7 @@ public class FournisseurMapper {
         fournisseur.setEmail(fournisseurDto.email());
         fournisseur.setMotDePasse(fournisseurDto.motDePasse());
         fournisseur.setTelephone(fournisseurDto.telephone());
+        fournisseur.setPays(fournisseurDto.pays());
         fournisseur.setActif(fournisseurDto.actif());
         fournisseur.setRole(fournisseurDto.role());
         return fournisseur;

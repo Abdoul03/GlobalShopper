@@ -1,0 +1,42 @@
+meta {
+  name: Creation de produit
+  type: http
+  seq: 11
+}
+
+post {
+  url: {{baseUrl}}/produits
+  body: multipartForm
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzIiwidHlwZSI6IkFDQ0VTU19UT0tFTiIsInJvbGUiOiJST0xFX0ZPVVJOSVNTRVVSIiwiaWF0IjoxNzYwODcyNjg3LCJleHAiOjE3NjA4NzM1ODd9.sWdt_Unce0ShAaQ1X7zgOq3IPzyiZNgXHWQ_kF6aJQs
+}
+
+body:json {
+  {
+    "nom":"T-Shirt",
+    "description":"T-shirt en couton de qualité superieur",
+    "prix":5000,
+    "moq":30,
+    "stock":30000,
+    "unite":"PIECES",
+  }
+}
+
+body:multipart-form {
+  : 
+  nom: T-shirt
+  description: T-shirt en couton de qualité superieur
+  prix: 5000
+  moq: 30
+  stock: 30000
+  unite: PIECES
+  media: @file(/Users/tuwindi/Downloads/K10K111346_YAF_main.webp)
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

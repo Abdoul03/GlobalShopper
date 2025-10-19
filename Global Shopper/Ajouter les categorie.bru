@@ -1,0 +1,26 @@
+meta {
+  name: Ajouter les categorie
+  type: http
+  seq: 12
+}
+
+post {
+  url: {{baseUrl}}/categorie
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwidHlwZSI6IkFDQ0VTU19UT0tFTiIsInJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzYwODcxNjg3LCJleHAiOjE3NjA4NzI1ODd9.PZDAol_Y0vEQJzv35oEDnI-WQ2lmyFpqixmRxP3K5Mo
+}
+
+body:json {
+  {
+    "nom":"Ustensile"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,14 +1,114 @@
 package com.globalshopper.GlobalShopper.service;
 
-import com.globalshopper.GlobalShopper.repository.ProduitRepository;
-import lombok.AllArgsConstructor;
+import com.globalshopper.GlobalShopper.dto.mapper.ProduitMapper;
+import com.globalshopper.GlobalShopper.dto.request.CaracteristiqueDTO;
+import com.globalshopper.GlobalShopper.dto.request.ProduitRequestDTO;
+import com.globalshopper.GlobalShopper.dto.response.ProduitResponseDTO;
+import com.globalshopper.GlobalShopper.entity.*;
+import com.globalshopper.GlobalShopper.repository.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ProduitService {
     private final ProduitRepository repository;
+    private final CaracteristiqueRepository caracteristiqueRepository;
+    private final FournisseurRepository fournisseurRepository;
+    private final MediaRepository mediaRepository;
+    private final CategorieRepository categorieRepository;
 
-    public ProduitService(ProduitRepository repository) {
+    private final String UPLOAD_DIR = "uploads/produits";
+
+    public ProduitService(ProduitRepository repository,
+                          CaracteristiqueRepository caracteristiqueRepository,
+                          FournisseurRepository fournisseurRepository, MediaRepository mediaRepository,
+                          CategorieRepository categorieRepository
+    ) {
         this.repository = repository;
+        this.caracteristiqueRepository = caracteristiqueRepository;
+        this.fournisseurRepository = fournisseurRepository;
+        this.mediaRepository = mediaRepository;
+        this.categorieRepository = categorieRepository;
     }
+
+    public ProduitResponseDTO ajouterProduit(ProduitRequestDTO produitRequest, MultipartFile[] images)throws IOException{
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long fournisseurId = Long.valueOf(authentication.getPrincipal().toString());
+
+        if (authentication.getAuthorities().stream()
+                .noneMatch(a -> a.getAuthority().equals("ROLE_FOURNISSEUR"))) {
+            throw new RuntimeException("Seules les fournisseur peuvent ajouter des produits");
+        }
+
+        Fournisseur fournisseur = fournisseurRepository.findById(fournisseurId).orElseThrow(()-> new RuntimeException("Fournisseur non trouver"));
+        Categorie categorie = categorieRepository.findById(produitRequest.categorieId()).orElseThrow(()-> new RuntimeException("Categorie non trouver"));
+
+        Produit produit = new Produit();
+
+        produit.setNom(produitRequest.nom());
+        produit.setDescription(produitRequest.description());
+        produit.setPrix(produitRequest.prix());
+        produit.setMoq(produitRequest.moq());
+        produit.setStock(produitRequest.stock());
+        produit.setCategorie(categorie);
+        produit.setFournisseur(fournisseur);
+        produit.setUnite(produitRequest.unite());
+
+       repository.save(produit);
+
+        // 2. Enregistrer les images
+        Path uploadPath = Paths.get(UPLOAD_DIR, String.valueOf(produit.getId()));
+        if (!Files.exists(uploadPath)) {
+            try {
+                Files.createDirectories(uploadPath);
+            } catch (IOException e) {
+                throw new RuntimeException("Impossible de créer le dossier d'upload.", e);
+            }
+        }
+
+        for (MultipartFile file : images) {
+            if (!file.isEmpty()) {
+                try {
+                    String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+                    Path filePath = uploadPath.resolve(fileName);
+                    Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+                    Media media = new Media();
+                    media.setFileName(fileName);
+                    media.setFileType(file.getContentType());
+                    media.setFilePath(filePath.toString());
+                    media.setProduit(produit);
+
+                    mediaRepository.save(media);
+
+                } catch (IOException e) {
+                    throw new RuntimeException("Erreur lors de l'enregistrement du fichier " + file.getOriginalFilename(), e);
+                }
+            }
+        }
+        // 3. Enregistrer les caractéristiques spécifiques
+        if (produitRequest.caracteristiques() != null){
+            for (CaracteristiqueDTO cr : produitRequest.caracteristiques()) {
+                Caracteristique caract = new Caracteristique();
+                caract.setNom(cr.nom());
+                caract.setValeur(cr.valeur());
+                caract.setProduit(produit);
+
+                caracteristiqueRepository.save(caract);
+            }
+        }
+        return ProduitMapper.toResponse(produit);
+    }
+
 }
