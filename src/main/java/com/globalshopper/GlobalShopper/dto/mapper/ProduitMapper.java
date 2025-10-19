@@ -47,7 +47,6 @@ public class ProduitMapper {
                 produit.getMoq(),
                 produit.getStock(),
                 produit.getUnite(),
-                produit.getMedia(),
                 produit.getCaracteristiques(),
                 produit.getFournisseur(),
                 produit.getCategorie(),

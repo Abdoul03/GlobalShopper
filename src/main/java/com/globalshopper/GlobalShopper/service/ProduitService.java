@@ -6,6 +6,7 @@ import com.globalshopper.GlobalShopper.dto.request.ProduitRequestDTO;
 import com.globalshopper.GlobalShopper.dto.response.ProduitResponseDTO;
 import com.globalshopper.GlobalShopper.entity.*;
 import com.globalshopper.GlobalShopper.repository.*;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -109,6 +110,32 @@ public class ProduitService {
             }
         }
         return ProduitMapper.toResponse(produit);
+    }
+
+    //get All produit
+    public List<ProduitResponseDTO> getProduit(){
+        List<Produit> produits = repository.findAll();
+        return produits.stream().map(ProduitMapper::toResponse).toList();
+    }
+
+    //get a produit
+    public ProduitResponseDTO getAProduict(long id){
+        Produit produit = repository.findById(id).orElseThrow(()-> new EntityNotFoundException("Produit introuvable"));
+        return ProduitMapper.toResponse(produit);
+    }
+
+    //get A Produict
+    public ProduitResponseDTO updateProduct(Long id , ProduitRequestDTO produitRequestDTO){
+        Produit produit = repository.findById(id).orElseThrow(()-> new EntityNotFoundException("Produit introuvable"));
+
+        repository.save(produit);
+        return ProduitMapper.toResponse(produit);
+    }
+
+    //delete produit
+    public String deleteProduct(Long id){
+        repository.deleteById(id);
+        return "Produit supprimer avec succes";
     }
 
 }

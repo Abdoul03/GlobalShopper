@@ -26,14 +26,26 @@ body:json {
 }
 
 body:multipart-form {
-  : 
-  nom: T-shirt
-  description: T-shirt en couton de qualité superieur
-  prix: 5000
-  moq: 30
-  stock: 30000
-  unite: PIECES
-  media: @file(/Users/tuwindi/Downloads/K10K111346_YAF_main.webp)
+  produit: '''
+    {
+      "nom": "Savon naturel",
+      "description": "Savon à base de karité",
+      "prix": 2500,
+      "moq": 20,
+      "stock": 100,
+      "unite": "PIECE",
+      "caracteristiques": [
+        { "nom": "Poids", "valeur": "100g" },
+        { "nom": "Parfum", "valeur": "Karité" }
+      ],
+      "categorieId": 1
+    }
+  ''' @contentType(Text)
+  images: 
+}
+
+body:file {
+  ~file: @file()
 }
 
 settings {
