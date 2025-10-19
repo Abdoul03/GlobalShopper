@@ -1,5 +1,6 @@
 package com.globalshopper.GlobalShopper.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,6 +28,7 @@ public class Categorie {
     private String nom;
 
     @OneToMany(mappedBy = "categorie", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Set<Produit> produit;
 
     public long getId() {

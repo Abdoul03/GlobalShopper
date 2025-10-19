@@ -1,5 +1,6 @@
 package com.globalshopper.GlobalShopper.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,6 +13,7 @@ public class Caracteristique {
     private String valeur;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "caracteristique_id")
     private Produit produit;
 

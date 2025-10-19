@@ -1,6 +1,7 @@
 package com.globalshopper.GlobalShopper.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.globalshopper.GlobalShopper.entity.enums.OrderStatus;
 import jakarta.persistence.*;
@@ -50,6 +51,7 @@ public class CommandeGroupee {
 
     @ManyToOne
     @JoinColumn(name = "produit_id")
+    @JsonBackReference
     private Produit produit;
 
     @OneToMany(mappedBy = "commandeGroupee", cascade = CascadeType.ALL)

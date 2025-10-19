@@ -1,5 +1,6 @@
 package com.globalshopper.GlobalShopper.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,6 +18,7 @@ public class Media {
     private String filePath;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "produit_id")
     private Produit produit;
 

@@ -13,9 +13,10 @@ public record ProduitResponseDTO(
         int moq,
         int stock,
         UniteProduit unite,
-        List<Caracteristique> caracteristiques,
-        Fournisseur fournisseur,
-        Categorie categorie,
+        CategorieResponseDTO categorie,
+        List<CaracteristiqueResponseDTO> caracteristiques,
+        List<MediaResponseDTO> media,
+        FournisseurResponseDTO fournisseur,
         List<CommandeGroupee> commandeGroupees
 ) {
 }

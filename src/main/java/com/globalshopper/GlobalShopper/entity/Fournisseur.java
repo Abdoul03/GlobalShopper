@@ -1,5 +1,6 @@
 package com.globalshopper.GlobalShopper.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,6 +22,7 @@ public class Fournisseur extends Utilisateur {
     }
 
     @OneToMany(mappedBy = "fournisseur", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Produit> produit;
 
     @OneToMany(mappedBy = "fournisseur", cascade = CascadeType.ALL)

@@ -1,6 +1,8 @@
 package com.globalshopper.GlobalShopper.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.globalshopper.GlobalShopper.entity.enums.UniteProduit;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -25,20 +27,25 @@ public class Produit {
     private UniteProduit unite;
 
     @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Media> media;
 
     @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Caracteristique> caracteristiques;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "id_fournisseur")
     private Fournisseur fournisseur;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "id_categorie")
     private Categorie categorie;
 
     @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<CommandeGroupee> commandeGroupees;
 
     public Produit(long id, String nom, String description, int prix, String urlPhoto, int moq, int stock, UniteProduit unite, Fournisseur fournisseur, Categorie categorie, List<CommandeGroupee> commandeGroupees, List<Media> media, List<Caracteristique> caracteristiques) {

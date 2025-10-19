@@ -1,8 +1,7 @@
 package com.globalshopper.GlobalShopper.dto.mapper;
 
 import com.globalshopper.GlobalShopper.dto.request.ProduitRequestDTO;
-import com.globalshopper.GlobalShopper.dto.response.FournisseurResponseDTO;
-import com.globalshopper.GlobalShopper.dto.response.ProduitResponseDTO;
+import com.globalshopper.GlobalShopper.dto.response.*;
 import com.globalshopper.GlobalShopper.entity.Caracteristique;
 import com.globalshopper.GlobalShopper.entity.Categorie;
 import com.globalshopper.GlobalShopper.entity.Produit;
@@ -39,6 +38,22 @@ public class ProduitMapper {
     public static ProduitResponseDTO toResponse (Produit produit){
         if (produit == null) return null;
 
+        List<CaracteristiqueResponseDTO> caracteristiquesDTO = produit.getCaracteristiques().stream()
+                .map(c -> new CaracteristiqueResponseDTO(c.getId(), c.getNom(), c.getValeur()))
+                .collect(Collectors.toList());
+        List<MediaResponseDTO>  mediaDTO = produit.getMedia().stream()
+                .map(m -> new MediaResponseDTO(m.getId(), m.getFileName(), m.getFileType(), m.getFilePath())).collect(Collectors.toList());
+
+        FournisseurResponseDTO fournisseurDTO = getResponseDTO(produit);
+
+        CategorieResponseDTO categorieDTO = null;
+        if(produit.getCategorie() != null){
+            categorieDTO = new CategorieResponseDTO(
+                    produit.getCategorie().getId(),
+                    produit.getCategorie().getNom()
+            );
+        }
+
         return new ProduitResponseDTO(
                 produit.getId(),
                 produit.getNom(),
@@ -47,10 +62,30 @@ public class ProduitMapper {
                 produit.getMoq(),
                 produit.getStock(),
                 produit.getUnite(),
-                produit.getCaracteristiques(),
-                produit.getFournisseur(),
-                produit.getCategorie(),
+                categorieDTO,
+                caracteristiquesDTO ,
+                mediaDTO,
+                fournisseurDTO,
                 produit.getCommandeGroupees()
         );
+    }
+
+    private static FournisseurResponseDTO getResponseDTO(Produit produit) {
+        FournisseurResponseDTO fournisseurDTO = null;
+        if(produit.getFournisseur() != null){
+            fournisseurDTO = new  FournisseurResponseDTO(
+                    produit.getFournisseur().getId(),
+                    produit.getFournisseur().getNom(),
+                    produit.getFournisseur().getPrenom(),
+                    produit.getFournisseur().getUsername(),
+                    produit.getFournisseur().getTelephone(),
+                    produit.getFournisseur().getEmail(),
+                    produit.getFournisseur().isActif(),
+                    produit.getFournisseur().getPhotoUrl(),
+                    produit.getFournisseur().getPays(),
+                    produit.getFournisseur().getRole()
+            );
+        }
+        return fournisseurDTO;
     }
 }
