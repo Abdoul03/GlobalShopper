@@ -1,6 +1,7 @@
 package com.globalshopper.GlobalShopper.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,10 +27,12 @@ public class Participation {
     private long Id;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "Commercant_id")
     private Commercant commercant;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "commandeGroupe_Id")
     private CommandeGroupee commandeGroupee;
 

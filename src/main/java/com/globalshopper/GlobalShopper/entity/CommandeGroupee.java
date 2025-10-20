@@ -2,30 +2,26 @@ package com.globalshopper.GlobalShopper.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.globalshopper.GlobalShopper.entity.enums.OrderStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Entity
 public class CommandeGroupee {
 
-    public CommandeGroupee(long id, int montant, OrderStatus status, int quantiteRequis, int quanitrActuelle, LocalDate deadline, Produit produit, List<Participation> participations) {
+    public CommandeGroupee(long id, int montant, OrderStatus status, int quantiteRequis, int quaniteActuelle, LocalDate deadline, Produit produit, List<Participation> participations, LocalDate dateDebut) {
         this.id = id;
         this.montant = montant;
         this.status = status;
         this.quantiteRequis = quantiteRequis;
-        this.quanitrActuelle = quanitrActuelle;
+        this.quaniteActuelle = quaniteActuelle;
         this.deadline = deadline;
         this.produit = produit;
         this.participations = participations;
+        this.dateDebut = dateDebut;
     }
     public CommandeGroupee(){
 
@@ -44,10 +40,12 @@ public class CommandeGroupee {
     @Column(nullable = false)
     private int quantiteRequis;
 
-    private int quanitrActuelle;
+    private int quaniteActuelle;
 
     @Column(nullable = false)
     private LocalDate deadline;
+
+    private LocalDate dateDebut;
 
     @ManyToOne
     @JoinColumn(name = "produit_id")
@@ -55,6 +53,7 @@ public class CommandeGroupee {
     private Produit produit;
 
     @OneToMany(mappedBy = "commandeGroupee", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Participation> participations;
 
     public long getId() {
@@ -89,12 +88,12 @@ public class CommandeGroupee {
         this.quantiteRequis = quantiteRequis;
     }
 
-    public int getQuanitrActuelle() {
-        return quanitrActuelle;
+    public int getQuaniteActuelle() {
+        return quaniteActuelle;
     }
 
-    public void setQuanitrActuelle(int quanitrActuelle) {
-        this.quanitrActuelle = quanitrActuelle;
+    public void setQuaniteActuelle(int quaniteActuelle) {
+        this.quaniteActuelle = quaniteActuelle;
     }
 
     public LocalDate getDeadline() {
@@ -119,5 +118,13 @@ public class CommandeGroupee {
 
     public void setParticipations(List<Participation> participations) {
         this.participations = participations;
+    }
+
+    public LocalDate getDateDebut() {
+        return dateDebut;
+    }
+
+    public void setDateDebut(LocalDate dateDebut) {
+        this.dateDebut = dateDebut;
     }
 }

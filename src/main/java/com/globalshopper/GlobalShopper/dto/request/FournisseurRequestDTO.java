@@ -12,6 +12,6 @@ public record FournisseurRequestDTO (
         String motDePasse,
         boolean actif,
         Role role,
-        Pays pays
+        long idPays
 ){
 }

@@ -1,5 +1,6 @@
 package com.globalshopper.GlobalShopper.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
@@ -23,6 +24,7 @@ public class Commercant extends Utilisateur {
     }
 
     @OneToMany(mappedBy = "commercant", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Participation> participation;
 
     public List<Participation> getParticipation() {

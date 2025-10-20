@@ -5,6 +5,7 @@ import com.globalshopper.GlobalShopper.dto.request.CommercantRequestDTO;
 import com.globalshopper.GlobalShopper.dto.response.CommercantResponseDTO;
 
 import com.globalshopper.GlobalShopper.entity.Commercant;
+import com.globalshopper.GlobalShopper.entity.Pays;
 import com.globalshopper.GlobalShopper.entity.enums.Role;
 import com.globalshopper.GlobalShopper.repository.CommercantRepository;
 import jakarta.persistence.EntityNotFoundException;

@@ -15,9 +15,9 @@ public record CommercantResponseDTO(
         String email,
         boolean actif,
         String photoUrl,
-        Pays pays,
+        PaysResponseDTO pays,
         Role role,
-        List<Participation> participations
+        List<ParticipationResponseDTO> participations
 ) {
 
 }

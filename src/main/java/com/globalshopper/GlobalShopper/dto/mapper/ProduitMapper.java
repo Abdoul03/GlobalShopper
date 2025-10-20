@@ -5,6 +5,7 @@ import com.globalshopper.GlobalShopper.dto.response.*;
 import com.globalshopper.GlobalShopper.entity.Caracteristique;
 import com.globalshopper.GlobalShopper.entity.Categorie;
 import com.globalshopper.GlobalShopper.entity.Produit;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -72,6 +73,15 @@ public class ProduitMapper {
 
     private static FournisseurResponseDTO getResponseDTO(Produit produit) {
         FournisseurResponseDTO fournisseurDTO = null;
+
+        PaysResponseDTO paysDTO = null;
+        if(produit.getFournisseur().getPays() != null){
+            paysDTO = new PaysResponseDTO(
+                    produit.getFournisseur().getPays().getId(),
+                    produit.getFournisseur().getPays().getNom()
+            );
+        }
+
         if(produit.getFournisseur() != null){
             fournisseurDTO = new  FournisseurResponseDTO(
                     produit.getFournisseur().getId(),
@@ -82,7 +92,7 @@ public class ProduitMapper {
                     produit.getFournisseur().getEmail(),
                     produit.getFournisseur().isActif(),
                     produit.getFournisseur().getPhotoUrl(),
-                    produit.getFournisseur().getPays(),
+                    paysDTO,
                     produit.getFournisseur().getRole()
             );
         }

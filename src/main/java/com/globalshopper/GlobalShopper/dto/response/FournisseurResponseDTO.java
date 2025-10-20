@@ -15,7 +15,7 @@ public record FournisseurResponseDTO(
         String email,
         boolean actif,
         String photoUrl,
-        Pays pays,
+        PaysResponseDTO pays,
         Role role
 ) {
 }

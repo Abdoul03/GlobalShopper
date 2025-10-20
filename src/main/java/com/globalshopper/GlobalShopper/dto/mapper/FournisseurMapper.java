@@ -4,19 +4,20 @@ import com.globalshopper.GlobalShopper.dto.request.CommercantRequestDTO;
 import com.globalshopper.GlobalShopper.dto.request.FournisseurRequestDTO;
 import com.globalshopper.GlobalShopper.dto.response.CommercantResponseDTO;
 import com.globalshopper.GlobalShopper.dto.response.FournisseurResponseDTO;
+import com.globalshopper.GlobalShopper.dto.response.PaysResponseDTO;
 import com.globalshopper.GlobalShopper.entity.Commercant;
 import com.globalshopper.GlobalShopper.entity.Fournisseur;
+import com.globalshopper.GlobalShopper.entity.Pays;
 
 public class FournisseurMapper {
 
-    public static Fournisseur toEntity(FournisseurRequestDTO fournisseurDto, Fournisseur fournisseur){
+    public static Fournisseur toEntity(FournisseurRequestDTO fournisseurDto, Fournisseur fournisseur ){
         fournisseur.setNom(fournisseurDto.nom());
         fournisseur.setPrenom(fournisseurDto.prenom());
         fournisseur.setUsername(fournisseurDto.username());
         fournisseur.setEmail(fournisseurDto.email());
         fournisseur.setMotDePasse(fournisseurDto.motDePasse());
         fournisseur.setTelephone(fournisseurDto.telephone());
-        fournisseur.setPays(fournisseurDto.pays());
         fournisseur.setActif(fournisseurDto.actif());
         fournisseur.setRole(fournisseurDto.role());
         return fournisseur;
@@ -24,6 +25,14 @@ public class FournisseurMapper {
 
     public static FournisseurResponseDTO toResponse(Fournisseur fournisseur){
         if(fournisseur == null) return null;
+
+        PaysResponseDTO paysDTO = null;
+        if(fournisseur.getPays() != null){
+            paysDTO = new PaysResponseDTO(
+                    fournisseur.getPays().getId(),
+                    fournisseur.getPays().getNom()
+            );
+        }
 
         return new FournisseurResponseDTO(
                 fournisseur.getId(),
@@ -34,7 +43,7 @@ public class FournisseurMapper {
                 fournisseur.getEmail(),
                 fournisseur.isActif(),
                 fournisseur.getPhotoUrl(),
-                fournisseur.getPays(),
+                paysDTO,
                 fournisseur.getRole()
         );
     }

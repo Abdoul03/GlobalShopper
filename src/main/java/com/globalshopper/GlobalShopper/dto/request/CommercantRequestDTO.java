@@ -13,7 +13,8 @@ public record CommercantRequestDTO (
         String email,
         String motDePasse,
         boolean actif,
-        Role role
+        Role role,
+        long idPays
 ){
 
 }

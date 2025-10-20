@@ -4,6 +4,7 @@ import com.globalshopper.GlobalShopper.dto.mapper.FournisseurMapper;
 import com.globalshopper.GlobalShopper.dto.request.FournisseurRequestDTO;
 import com.globalshopper.GlobalShopper.dto.response.FournisseurResponseDTO;
 import com.globalshopper.GlobalShopper.entity.Fournisseur;
+import com.globalshopper.GlobalShopper.entity.Pays;
 import com.globalshopper.GlobalShopper.entity.enums.Role;
 import com.globalshopper.GlobalShopper.repository.FournisseurRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -24,9 +25,11 @@ public class FournisseurService {
     private final PasswordEncoder passwordEncoder;
 
     public FournisseurResponseDTO CreatFournisseur(FournisseurRequestDTO fournisseurDTO){
+//        Pays pays = new Pays();
         Fournisseur fournisseur = FournisseurMapper.toEntity(fournisseurDTO, new Fournisseur());
         fournisseur.setRole(Role.ROLE_FOURNISSEUR);
         fournisseur.setMotDePasse(passwordEncoder.encode(fournisseurDTO.motDePasse()));
+//        fournisseur.setPays(pays);
         fournisseurRepository.save(fournisseur);
         return FournisseurMapper.toResponse(fournisseur);
     }
