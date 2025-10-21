@@ -18,7 +18,7 @@ public class CompteFourisseur {
     @OneToOne
     private Fournisseur fournisseur;
 
-    @OneToMany(mappedBy = "fournisseur", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "compteFourisseur", cascade = CascadeType.ALL)
     private List<Transaction> transactions;
 
     // constructors

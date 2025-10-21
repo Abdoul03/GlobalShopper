@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @Entity
 public class Participation {
-    public Participation(long id, Commercant commercant, CommandeGroupee commandeGroupee, LocalDate data, int quantite, double montant, Transaction transaction) {
+    public Participation(int id, Commercant commercant, CommandeGroupee commandeGroupee, LocalDate data, int quantite, double montant, Transaction transaction) {
         Id = id;
         this.commercant = commercant;
         this.commandeGroupee = commandeGroupee;
@@ -24,7 +24,7 @@ public class Participation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long Id;
+    private int Id;
 
     @ManyToOne
     @JsonBackReference
@@ -43,11 +43,11 @@ public class Participation {
     @OneToOne(mappedBy = "participation")
     private Transaction transaction;
 
-    public long getId() {
+    public int getId() {
         return Id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         Id = id;
     }
 

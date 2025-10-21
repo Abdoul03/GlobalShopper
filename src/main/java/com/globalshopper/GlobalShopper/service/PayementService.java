@@ -109,7 +109,7 @@ public class PayementService {
     }
 
     @Transactional
-    public Transaction payementFournisseur(long commandId){
+    public Transaction payementFournisseur(int commandId){
         try {
             CommandeGroupee commandeGroupee = commandeGroupeeRepository.findById(commandId).orElseThrow(
                     ()-> new EntityNotFoundException("Aucune commande groupé trouver"));

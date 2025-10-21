@@ -139,7 +139,7 @@ public class CommandeGroupeeService {
     }
 
     @Transactional
-    public CommandeGroupeeResponseDTO retirerParticipation(long commandeId) {
+    public CommandeGroupeeResponseDTO retirerParticipation(int commandeId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long commercantId = Long.valueOf(authentication.getPrincipal().toString());
 
@@ -154,7 +154,7 @@ public class CommandeGroupeeService {
         }
 
         // Trouver la participation du commerçant
-        Participation participation = commande.getParticipations().stream().filter(p -> p.getCommercant().getId().equals(commercantId))
+        Participation participation = commande.getParticipations().stream().filter(p -> p.getCommercant().getId() == commercantId)
                 .findFirst().orElseThrow(() -> new RuntimeException("Vous ne participez pas à cette commande."));
 
         // Créer une transaction de remboursement

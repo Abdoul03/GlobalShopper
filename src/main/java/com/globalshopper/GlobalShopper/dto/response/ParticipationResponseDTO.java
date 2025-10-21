@@ -7,7 +7,7 @@ import com.globalshopper.GlobalShopper.entity.Transaction;
 import java.time.LocalDate;
 
 public record ParticipationResponseDTO(
-        long id,
+        int id,
         CommandeGroupeeResponseDTO commandeGroupeeResponseDTO,
         CommercantResponseDTO commercantResponseDTO,
         LocalDate data,

@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 public class CommandeGroupee {
 
-    public CommandeGroupee(long id, double montant, OrderStatus status, int quantiteRequis, int quaniteActuelle, LocalDate deadline, Produit produit, List<Participation> participations, LocalDate dateDebut,Commercant commercant) {
+    public CommandeGroupee(int id, double montant, OrderStatus status, int quantiteRequis, int quaniteActuelle, LocalDate deadline, Produit produit, List<Participation> participations, LocalDate dateDebut,Commercant commercant) {
         this.id = id;
         this.montant = montant;
         this.status = status;
@@ -30,7 +30,7 @@ public class CommandeGroupee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
     @Column(nullable = false)
     private double montant;
@@ -61,11 +61,11 @@ public class CommandeGroupee {
     @JsonManagedReference
     private List<Participation> participations;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
