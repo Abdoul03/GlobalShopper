@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 public class CommandeGroupee {
 
-    public CommandeGroupee(long id, int montant, OrderStatus status, int quantiteRequis, int quaniteActuelle, LocalDate deadline, Produit produit, List<Participation> participations, LocalDate dateDebut) {
+    public CommandeGroupee(long id, double montant, OrderStatus status, int quantiteRequis, int quaniteActuelle, LocalDate deadline, Produit produit, List<Participation> participations, LocalDate dateDebut,Commercant commercant) {
         this.id = id;
         this.montant = montant;
         this.status = status;
@@ -22,6 +22,7 @@ public class CommandeGroupee {
         this.produit = produit;
         this.participations = participations;
         this.dateDebut = dateDebut;
+        this.commercant = commercant;
     }
     public CommandeGroupee(){
 
@@ -32,7 +33,7 @@ public class CommandeGroupee {
     private long id;
 
     @Column(nullable = false)
-    private int montant;
+    private double montant;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
@@ -44,8 +45,12 @@ public class CommandeGroupee {
 
     @Column(nullable = false)
     private LocalDate deadline;
-
     private LocalDate dateDebut;
+
+    @ManyToOne
+    @JoinColumn(name = "commercant_id")
+    @JsonBackReference
+    private Commercant commercant;
 
     @ManyToOne
     @JoinColumn(name = "produit_id")
@@ -64,11 +69,11 @@ public class CommandeGroupee {
         this.id = id;
     }
 
-    public int getMontant() {
+    public double getMontant() {
         return montant;
     }
 
-    public void setMontant(int montant) {
+    public void setMontant(double montant) {
         this.montant = montant;
     }
 
@@ -126,5 +131,13 @@ public class CommandeGroupee {
 
     public void setDateDebut(LocalDate dateDebut) {
         this.dateDebut = dateDebut;
+    }
+
+    public Commercant getCommercant() {
+        return commercant;
+    }
+
+    public void setCommercant(Commercant commercant) {
+        this.commercant = commercant;
     }
 }

@@ -12,7 +12,7 @@ public record ParticipationResponseDTO(
         CommercantResponseDTO commercantResponseDTO,
         LocalDate data,
         int quantite,
-        int montant,
+        double montant,
         Transaction transaction
 ) {
 }

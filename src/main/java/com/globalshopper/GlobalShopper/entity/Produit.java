@@ -20,7 +20,7 @@ public class Produit {
 
     private String nom;
     private String description;
-    private int prix;
+    private double prix;
     private int moq;
     private int stock;
     @Enumerated(EnumType.STRING)
@@ -48,7 +48,7 @@ public class Produit {
     @JsonManagedReference
     private List<CommandeGroupee> commandeGroupees;
 
-    public Produit(long id, String nom, String description, int prix, String urlPhoto, int moq, int stock, UniteProduit unite, Fournisseur fournisseur, Categorie categorie, List<CommandeGroupee> commandeGroupees, List<Media> media, List<Caracteristique> caracteristiques) {
+    public Produit(long id, String nom, String description, double prix, String urlPhoto, int moq, int stock, UniteProduit unite, Fournisseur fournisseur, Categorie categorie, List<CommandeGroupee> commandeGroupees, List<Media> media, List<Caracteristique> caracteristiques) {
         this.id = id;
         this.nom = nom;
         this.description = description;
@@ -91,11 +91,11 @@ public class Produit {
         this.description = description;
     }
 
-    public int getPrix() {
+    public double getPrix() {
         return prix;
     }
 
-    public void setPrix(int prix) {
+    public void setPrix(double prix) {
         this.prix = prix;
     }
 

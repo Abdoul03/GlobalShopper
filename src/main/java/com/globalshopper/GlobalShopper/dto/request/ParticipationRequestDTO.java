@@ -4,12 +4,6 @@ import com.globalshopper.GlobalShopper.entity.Transaction;
 import java.time.LocalDate;
 
 public record ParticipationRequestDTO (
-        CommercantRequestDTO commercant,
-        CommandeGroupeeRequestDTO commandeGroupee,
-        LocalDate data,
-        int quantite,
-        int montant,
-        Transaction transaction,
-        long CommandeId
+        int quantite
 ){
 }

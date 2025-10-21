@@ -2,6 +2,7 @@ package com.globalshopper.GlobalShopper.entity;
 
 
 import com.globalshopper.GlobalShopper.entity.enums.MethodeDePayement;
+import com.globalshopper.GlobalShopper.entity.enums.Statut;
 import com.globalshopper.GlobalShopper.entity.enums.TransactionType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,10 @@ import java.time.LocalDate;
 @Entity
 public class Transaction {
 
-    public Transaction(long id, int montant, TransactionType transactionType, MethodeDePayement methodeDePayement, LocalDate date, Participation participation, Wallet wallet, Fournisseur fournisseur) {
+    public Transaction(long id, double montant,
+                       TransactionType transactionType,
+                       MethodeDePayement methodeDePayement, LocalDate date, Participation participation,
+                       Wallet wallet, CompteFourisseur compteFourisseur, Statut statut) {
         this.id = id;
         this.montant = montant;
         this.transactionType = transactionType;
@@ -23,7 +27,8 @@ public class Transaction {
         this.date = date;
         this.participation = participation;
         this.wallet = wallet;
-        this.fournisseur = fournisseur;
+        this.compteFourisseur = compteFourisseur;
+        this.statut = statut;
     }
     public Transaction(){
 
@@ -33,7 +38,7 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private int montant;
+    private double montant;
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
     @Enumerated(EnumType.STRING)
@@ -50,8 +55,10 @@ public class Transaction {
     private Wallet wallet;
 
     @ManyToOne
-    @JoinColumn(name = "fournisser_id")
-    private Fournisseur fournisseur;
+    @JoinColumn(name = "compteFournisseur_id")
+    private CompteFourisseur compteFourisseur;
+
+    private Statut statut;
 
     public long getId() {
         return id;
@@ -61,11 +68,11 @@ public class Transaction {
         this.id = id;
     }
 
-    public int getMontant() {
+    public double getMontant() {
         return montant;
     }
 
-    public void setMontant(int montant) {
+    public void setMontant(double montant) {
         this.montant = montant;
     }
 
@@ -109,11 +116,19 @@ public class Transaction {
         this.wallet = wallet;
     }
 
-    public Fournisseur getFournisseur() {
-        return fournisseur;
+    public CompteFourisseur getCompteFourisseur() {
+        return compteFourisseur;
     }
 
-    public void setFournisseur(Fournisseur fournisseur) {
-        this.fournisseur = fournisseur;
+    public void setCompteFourisseur(CompteFourisseur compteFourisseur) {
+        this.compteFourisseur = compteFourisseur;
+    }
+
+    public Statut getStatut() {
+        return statut;
+    }
+
+    public void setStatut(Statut statut) {
+        this.statut = statut;
     }
 }

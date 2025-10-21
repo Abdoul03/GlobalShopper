@@ -11,7 +11,7 @@ import java.util.List;
 public record ProduitRequestDTO(
         String nom,
         String description,
-        int prix,
+        double prix,
         int moq,
         int stock,
         UniteProduit unite,

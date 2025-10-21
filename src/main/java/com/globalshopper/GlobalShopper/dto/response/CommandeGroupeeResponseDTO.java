@@ -7,10 +7,10 @@ import java.util.List;
 
 public record CommandeGroupeeResponseDTO(
         long id,
-        int montant,
+        double montant,
         OrderStatus status,
         int quantiteRequis,
-        int quanitrActuelle,
+        int quaniteActuelle,
         LocalDate deadline,
         LocalDate dateDebut,
         ProduitResponseDTO produit,

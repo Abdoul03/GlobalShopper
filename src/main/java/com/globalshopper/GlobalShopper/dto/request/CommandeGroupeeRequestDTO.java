@@ -6,10 +6,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 public record CommandeGroupeeRequestDTO(
-        int montant,
-        OrderStatus status,
+        double montant,
         int quantiteRequis,
-        int quaniteActuelle,
         LocalDate deadline,
         LocalDate dateDebut,
         long produitId,

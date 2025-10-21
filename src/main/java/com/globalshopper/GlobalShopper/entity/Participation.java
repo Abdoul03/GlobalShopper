@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @Entity
 public class Participation {
-    public Participation(long id, Commercant commercant, CommandeGroupee commandeGroupee, LocalDate data, int quantite, int montant, Transaction transaction) {
+    public Participation(long id, Commercant commercant, CommandeGroupee commandeGroupee, LocalDate data, int quantite, double montant, Transaction transaction) {
         Id = id;
         this.commercant = commercant;
         this.commandeGroupee = commandeGroupee;
@@ -38,7 +38,7 @@ public class Participation {
 
     private LocalDate data;
     private int quantite;
-    private int montant;
+    private double montant;
 
     @OneToOne(mappedBy = "participation")
     private Transaction transaction;
@@ -83,11 +83,11 @@ public class Participation {
         this.quantite = quantite;
     }
 
-    public int getMontant() {
+    public double getMontant() {
         return montant;
     }
 
-    public void setMontant(int montant) {
+    public void setMontant(double montant) {
         this.montant = montant;
     }
 

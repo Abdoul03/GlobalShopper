@@ -13,12 +13,13 @@ import java.util.List;
 
 @Entity
 public class Wallet {
-    public Wallet(long id, int montant, LocalDate miseAjour, Statut statut, List<Transaction> transactions) {
+    public Wallet(long id, double montant, LocalDate miseAjour, Statut statut, List<Transaction> transactions, String numero) {
         this.id = id;
         this.montant = montant;
         this.miseAjour = miseAjour;
         this.statut = statut;
         this.transactions = transactions;
+        this.numero = numero;
     }
     public Wallet (){
 
@@ -28,13 +29,15 @@ public class Wallet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private int montant;
+    private double montant;
     private LocalDate miseAjour;
     @Enumerated(EnumType.STRING)
     private Statut statut;
 
     @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL)
     private List<Transaction> transactions;
+
+    private String numero;
 
     public long getId() {
         return id;
@@ -44,11 +47,11 @@ public class Wallet {
         this.id = id;
     }
 
-    public int getMontant() {
+    public double getMontant() {
         return montant;
     }
 
-    public void setMontant(int montant) {
+    public void setMontant(double montant) {
         this.montant = montant;
     }
 
@@ -75,4 +78,8 @@ public class Wallet {
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
     }
+
+    public String getNumero() {return numero;}
+
+    public void setNumero(String numero) {this.numero = numero;}
 }

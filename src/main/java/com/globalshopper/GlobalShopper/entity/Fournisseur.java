@@ -12,9 +12,9 @@ import java.util.List;
 @Entity
 public class Fournisseur extends Utilisateur {
 
-    public Fournisseur(List<Produit> produit, List<Transaction> transactions) {
+    public Fournisseur(List<Produit> produit, CompteFourisseur compteFourisseur) {
         this.produit = produit;
-        this.transactions = transactions;
+        this.compteFourisseur  = compteFourisseur;
     }
 
     public Fournisseur(){
@@ -25,8 +25,8 @@ public class Fournisseur extends Utilisateur {
     @JsonManagedReference
     private List<Produit> produit;
 
-    @OneToMany(mappedBy = "fournisseur", cascade = CascadeType.ALL)
-    private List<Transaction> transactions;
+    @OneToOne
+    private CompteFourisseur compteFourisseur;
 
 
     public List<Produit> getProduit() {
@@ -37,11 +37,11 @@ public class Fournisseur extends Utilisateur {
         this.produit = produit;
     }
 
-    public List<Transaction> getTransactions() {
-        return transactions;
+    public CompteFourisseur getCompteFourisseur() {
+        return compteFourisseur;
     }
 
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
+    public void setCompteFourisseur(CompteFourisseur compteFourisseur) {
+        this.compteFourisseur = compteFourisseur;
     }
 }
