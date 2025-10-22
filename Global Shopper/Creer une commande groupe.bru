@@ -1,0 +1,31 @@
+meta {
+  name: Creer une commande groupe
+  type: http
+  seq: 14
+}
+
+post {
+  url: http://localhost:8080/api/commandeGroupee/1?deadline=2025-12-31
+  body: json
+  auth: bearer
+}
+
+params:query {
+  deadline: 2025-12-31
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwidHlwZSI6IkFDQ0VTU19UT0tFTiIsInJvbGUiOiJST0xFX0NPTU1FUkNBTlQiLCJpYXQiOjE3NjEwOTQ0MjAsImV4cCI6MTc2MTA5NTMyMH0.bdOJ-4aPqHsa19Ak15ugN8LJf4HL3rBETYRnF2J1cK4
+}
+
+body:json {
+  {
+    "quantite" : 3,
+    "deadline" : "2025-10-03"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

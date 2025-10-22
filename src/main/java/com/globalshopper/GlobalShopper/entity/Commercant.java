@@ -25,11 +25,11 @@ public class Commercant extends Utilisateur {
     }
 
     @OneToMany(mappedBy = "commercant", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonManagedReference("commercant-commande")
     private List<CommandeGroupee> commandeGroupees;
 
-    @OneToMany(mappedBy = "commercant", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @OneToMany(mappedBy = "commercant", cascade = CascadeType.ALL,orphanRemoval = true)
+    @JsonManagedReference("commercant-participation")
     private List<Participation> participation;
 
     public List<Participation> getParticipation() {

@@ -33,16 +33,16 @@ public class CommercantMapp {
             );
         }
 
-        List<ParticipationResponseDTO> participation = commercant.getParticipation().stream()
-                .map(p-> new ParticipationResponseDTO(
-                        p.getId(),
-                        CommandeGroupeeMapper.toResponse(p.getCommandeGroupee()),
-                        CommercantMapp.toResponse(p.getCommercant()),
-                        p.getData(),
-                        p.getQuantite(),
-                        p.getMontant(),
-                        p.getTransaction())
-                ).collect(Collectors.toList());
+//        List<ParticipationResponseDTO> participation = commercant.getParticipation().stream()
+//                .map(p-> new ParticipationResponseDTO(
+//                        p.getId(),
+//                        CommandeGroupeeMapper.toResponse(p.getCommandeGroupee()),
+//                        CommercantMapp.toResponse(p.getCommercant()),
+//                        p.getData(),
+//                        p.getQuantite(),
+//                        p.getMontant(),
+//                        p.getTransaction())
+//                ).collect(Collectors.toList());
 
         CommercantResponseDTO commercantResponse = new CommercantResponseDTO(
                 commercant.getId(),
@@ -54,8 +54,8 @@ public class CommercantMapp {
                 commercant.isActif(),
                 commercant.getPhotoUrl(),
                 paysDTO,
-                commercant.getRole(),
-                participation
+                commercant.getRole()
+              //  participation
         );
         return commercantResponse;
     }

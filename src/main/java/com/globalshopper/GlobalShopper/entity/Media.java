@@ -18,7 +18,7 @@ public class Media {
     private String filePath;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference("produit-media")
     @JoinColumn(name = "produit_id")
     private Produit produit;
 

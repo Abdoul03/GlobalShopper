@@ -2,10 +2,7 @@ package com.globalshopper.GlobalShopper.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 
 import java.util.Set;
 
@@ -28,7 +25,7 @@ public class Categorie {
     private String nom;
 
     @OneToMany(mappedBy = "categorie", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonManagedReference("categorie-produit")
     private Set<Produit> produit;
 
     public long getId() {

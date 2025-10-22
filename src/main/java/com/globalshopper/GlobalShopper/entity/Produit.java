@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,25 +28,25 @@ public class Produit {
     private UniteProduit unite;
 
     @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonManagedReference("produit-media")
     private List<Media> media;
 
     @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<Caracteristique> caracteristiques;
+    @JsonManagedReference("produit-caracteristique")
+    private List<Caracteristique> caracteristiques = new ArrayList<>();;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference("produit-fournisseur")
     @JoinColumn(name = "id_fournisseur")
     private Fournisseur fournisseur;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference("categorie-produit")
     @JoinColumn(name = "id_categorie")
     private Categorie categorie;
 
     @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonManagedReference("produit-commande")
     private List<CommandeGroupee> commandeGroupees;
 
     public Produit(long id, String nom, String description, double prix, String urlPhoto, int moq, int stock, UniteProduit unite, Fournisseur fournisseur, Categorie categorie, List<CommandeGroupee> commandeGroupees, List<Media> media, List<Caracteristique> caracteristiques) {

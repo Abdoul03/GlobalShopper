@@ -51,13 +51,14 @@ public class PayementService {
         if (paiementReussi) {
             transaction.setStatut(Statut.EFFECTUER);
             transaction.setMethodeDePayement(MethodeDePayement.ORANGE_MONEY);
+            transactionRepository.save(transaction);
         } else {
             transaction.setStatut(Statut.ANNULER);
             transaction.setMethodeDePayement(MethodeDePayement.ORANGE_MONEY);
         }
 
         // Sauvegarde de la transaction
-        transactionRepository.save(transaction);
+       // transactionRepository.save(transaction);
 
         List<Transaction> listTransaction = new ArrayList<>();
         listTransaction.add(transaction);

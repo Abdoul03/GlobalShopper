@@ -27,12 +27,12 @@ public class Participation {
     private int Id;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference("commercant-participation")
     @JoinColumn(name = "Commercant_id")
     private Commercant commercant;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference("commande-participation")
     @JoinColumn(name = "commandeGroupe_Id")
     private CommandeGroupee commandeGroupee;
 

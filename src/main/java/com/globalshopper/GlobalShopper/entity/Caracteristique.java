@@ -13,8 +13,8 @@ public class Caracteristique {
     private String valeur;
 
     @ManyToOne
-    @JsonBackReference
-    @JoinColumn(name = "caracteristique_id")
+    @JsonBackReference("produit-caracteristique")
+    @JoinColumn(name = "produit_id")
     private Produit produit;
 
     public Caracteristique(Long id, String nom, String valeur, Produit produit) {

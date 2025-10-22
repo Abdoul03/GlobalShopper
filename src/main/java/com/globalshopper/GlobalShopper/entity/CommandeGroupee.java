@@ -49,16 +49,16 @@ public class CommandeGroupee {
 
     @ManyToOne
     @JoinColumn(name = "commercant_id")
-    @JsonBackReference
+    @JsonBackReference("commercant-commande")
     private Commercant commercant;
 
     @ManyToOne
     @JoinColumn(name = "produit_id")
-    @JsonBackReference
+    @JsonBackReference("produit-commande")
     private Produit produit;
 
     @OneToMany(mappedBy = "commandeGroupee", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonManagedReference("commande-participation")
     private List<Participation> participations;
 
     public int getId() {

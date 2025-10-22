@@ -1,0 +1,27 @@
+meta {
+  name: inscription Commercant copy
+  type: http
+  seq: 16
+}
+
+post {
+  url: {{baseUrl}}/auth/commercant/register
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nom":"Samaké",
+    "prenom":"Abdoul Ibrahima",
+    "username":"Abdoul",
+    "telephone":"71267813",
+    "email":"samabdoul03@gmail.com",
+    "motDePasse":"azerty"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

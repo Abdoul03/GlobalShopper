@@ -16,8 +16,7 @@ public record CommercantResponseDTO(
         boolean actif,
         String photoUrl,
         PaysResponseDTO pays,
-        Role role,
-        List<ParticipationResponseDTO> participations
+        Role role
 ) {
 
 }

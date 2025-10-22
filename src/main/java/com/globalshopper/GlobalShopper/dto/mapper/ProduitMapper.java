@@ -30,8 +30,7 @@ public class ProduitMapper {
                     caract.setProduit(produit); // important pour la relation bidirectionnelle
                     return caract;
                 })
-                .collect(Collectors.toList())
-                : List.of();
+                .collect(Collectors.toList()) : List.of();
 
         produit.setCaracteristiques(caracteristiques);
         return produit;

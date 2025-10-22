@@ -22,7 +22,7 @@ public class Fournisseur extends Utilisateur {
     }
 
     @OneToMany(mappedBy = "fournisseur", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonManagedReference("produit-fournisseur")
     private List<Produit> produit;
 
     @OneToOne
