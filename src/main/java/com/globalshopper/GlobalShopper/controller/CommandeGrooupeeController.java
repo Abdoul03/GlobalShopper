@@ -18,12 +18,20 @@ public class CommandeGrooupeeController {
         this.commandeGroupeeService = commandeGroupeeService;
     }
 
-    @PostMapping("{produitId}")
+    @PostMapping("create/{produitId}")
     public ResponseEntity<CommandeGroupeeResponseDTO> getAOrder(
         @PathVariable long produitId,
         @RequestBody ParticipationRequestDTO participationDTO,
         @RequestParam LocalDate deadline
     ){
         return ResponseEntity.ok(commandeGroupeeService.createUneCommandeGroupee(produitId,participationDTO,deadline));
+    }
+
+    @PostMapping("join/{produitId}")
+    public ResponseEntity<CommandeGroupeeResponseDTO> joinGroupOrder(
+            @PathVariable long produitId,
+            @RequestBody ParticipationRequestDTO participationRequestDTO
+    ){
+        return ResponseEntity.ok(commandeGroupeeService.rejoindreUneCommandeGroupee(produitId, participationRequestDTO));
     }
 }

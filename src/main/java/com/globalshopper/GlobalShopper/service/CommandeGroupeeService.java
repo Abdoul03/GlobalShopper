@@ -3,6 +3,7 @@ package com.globalshopper.GlobalShopper.service;
 import com.globalshopper.GlobalShopper.dto.mapper.CommandeGroupeeMapper;
 import com.globalshopper.GlobalShopper.dto.request.ParticipationRequestDTO;
 import com.globalshopper.GlobalShopper.dto.response.CommandeGroupeeResponseDTO;
+import com.globalshopper.GlobalShopper.dto.response.CommercantResponseDTO;
 import com.globalshopper.GlobalShopper.entity.*;
 import com.globalshopper.GlobalShopper.entity.enums.OrderStatus;
 import com.globalshopper.GlobalShopper.repository.*;
@@ -53,7 +54,7 @@ public class CommandeGroupeeService {
         Optional<CommandeGroupee> commandeExistanteOpt = commandeGroupeeRepository.findByProduitAndStatus(produit, OrderStatus.ENCOURS);
 
 
-        CommandeGroupee commandeGroupee;
+        CommandeGroupee commandeGroupee = null;
 
         if (commandeExistanteOpt.isEmpty()){
             //Creer une commande groupée si le produit n'a pas de commande
@@ -91,10 +92,31 @@ public class CommandeGroupeeService {
             commandeGroupee.setDeadline(deadline);
 
             commandeGroupeeRepository.save(commandeGroupee);
-
+            
         } else {
+           rejoindreUneCommandeGroupee(prouitId,participationDTO);
+        }
+        return CommandeGroupeeMapper.toResponse(commandeGroupee);
+    }
+
+    public CommandeGroupeeResponseDTO rejoindreUneCommandeGroupee(long prouitId, ParticipationRequestDTO participationDTO){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long conmercantId = Long.valueOf(authentication.getPrincipal().toString());
+
+        if (authentication.getAuthorities().stream()
+                .noneMatch(a -> a.getAuthority().equals("ROLE_COMMERCANT"))) {
+            throw new RuntimeException("Seules les commercants peuvent creer des commandes groupées");
+        }
+
+        Commercant commercant = commercantRepository.findById(conmercantId).orElseThrow(()-> new EntityNotFoundException("commercant introuvable"));
+        Produit produit = produitRepository.findById(prouitId).orElseThrow(()-> new EntityNotFoundException("Prouduit introuvable"));
+
+        Optional<CommandeGroupee> commandeExistanteOpt = commandeGroupeeRepository.findByProduitAndStatus(produit, OrderStatus.ENCOURS);
+
+        CommandeGroupee commandeGroupee = null;
+        if (commandeExistanteOpt.isPresent()){
             // === CAS 2 : Rejoindre une commande existante ===
-            commandeGroupee = commandeExistanteOpt.get();
+             commandeGroupee = commandeExistanteOpt.get();
 
             // Vérifier si le commerçant participe déjà
             boolean dejaParticipant = commandeGroupee.getParticipations().stream()
@@ -133,8 +155,9 @@ public class CommandeGroupeeService {
             }
 
             commandeGroupeeRepository.save(commandeGroupee);
+        }else {
+            createUneCommandeGroupee(prouitId, participationDTO,commandeGroupee.getDeadline());
         }
-
         return CommandeGroupeeMapper.toResponse(commandeGroupee);
     }
 
@@ -175,6 +198,19 @@ public class CommandeGroupeeService {
         commandeGroupeeRepository.save(commande);
 
         return CommandeGroupeeMapper.toResponse(commande);
+    }
+
+
+    public Optional<List<CommandeGroupee>> allOrderCreateByTrader(long commercantId){
+        Optional<List<CommandeGroupee>> commande = commandeGroupeeRepository.findAllByCommercantId(commercantId);
+        return  commande;
+    }
+
+    public CommandeGroupeeResponseDTO orderCreateByTrader(long commandeId){
+        CommandeGroupee commandeGroupee = commandeGroupeeRepository.findByCommercantId(commandeId).orElseThrow(
+                ()-> new EntityNotFoundException("Commande introuvable"));
+
+        return CommandeGroupeeMapper.toResponse(commandeGroupee);
     }
 
 
