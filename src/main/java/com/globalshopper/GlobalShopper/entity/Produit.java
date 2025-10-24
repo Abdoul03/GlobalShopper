@@ -29,7 +29,7 @@ public class Produit {
 
     @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL)
     @JsonManagedReference("produit-media")
-    private List<Media> media;
+    private List<Media> media = new ArrayList<>();
 
     @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL)
     @JsonManagedReference("produit-caracteristique")

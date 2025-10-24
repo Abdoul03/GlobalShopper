@@ -1,0 +1,20 @@
+meta {
+  name: get all categorie
+  type: http
+  seq: 19
+}
+
+get {
+  url: {{baseUrl}}/categorie
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwidHlwZSI6IkFDQ0VTU19UT0tFTiIsInJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzYxMzM2NzkxLCJleHAiOjE3NjEzMzc2OTF9.LP3Mk9N7dqBsPECIdTVHjieyL9wVP6-URzTdAzBaJHI
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
