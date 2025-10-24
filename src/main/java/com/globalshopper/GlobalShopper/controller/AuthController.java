@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("auth")
 public class AuthController {
@@ -35,6 +37,15 @@ public class AuthController {
         return ResponseEntity.ok(
                 authentificationService.authenticate(authenticationRequest)
         );
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> deconnexion(
+            @RequestBody Map<String, String> request
+    ) {
+        String refreshToken = request.get("refreshToken");
+        String result = authentificationService.deleteRefreshToken(refreshToken);
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping("/refresh")

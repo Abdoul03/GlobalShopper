@@ -44,6 +44,7 @@ public class SecurityConfig {
                                     .requestMatchers("/admin/**").hasRole("ADMIN")
                                     .requestMatchers("/utilisateur/**").hasRole("ADMIN")
                                     .requestMatchers("/pays").hasRole("ADMIN")
+                                    .requestMatchers("/images/**").permitAll()
                                     .requestMatchers("/categorie").hasRole("ADMIN")
                                     .requestMatchers("/fournisseur/**").hasAnyRole("FOURNISSEUR","ADMIN")
                                     .requestMatchers("/commercant/**").hasAnyRole("COMMERCANT","ADMIN")

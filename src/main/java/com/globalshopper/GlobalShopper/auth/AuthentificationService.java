@@ -7,6 +7,7 @@ import com.globalshopper.GlobalShopper.entity.Utilisateur;
 import com.globalshopper.GlobalShopper.repository.RefreshTokenRepository;
 import com.globalshopper.GlobalShopper.repository.UtilisateurRepository;
 import io.jsonwebtoken.JwtException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -63,6 +64,24 @@ public class AuthentificationService {
         throw new BadCredentialsException(" Identifiant ou mot de passe incorrect.");
     }
 
+    public String deleteRefreshToken(String refreshToken){
+        if (!jwtService.isTokenRefreshValid(refreshToken)) {
+            throw new JwtException("Invalid refresh token.");
+        }
+
+        Long userId = jwtService.getUserIdFromToken(refreshToken);
+
+        RefreshToken tokenEntity = refreshTokenRepository
+                .findByToken(refreshToken)
+                .orElseThrow(() -> new EntityNotFoundException("Token introuvable ou déjà supprimé."));
+
+        if (tokenEntity.getUser().getId() != userId) {
+            throw new JwtException("Token ne correspond pas à l'utilisateur.");
+        }
+
+        refreshTokenRepository.delete(tokenEntity);
+        return "Token supprimer avec succes";
+    }
 
     @Transactional
     public TokenPairResponse refresh(String refreshToken) {
