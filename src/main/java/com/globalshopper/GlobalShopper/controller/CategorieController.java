@@ -1,5 +1,7 @@
 package com.globalshopper.GlobalShopper.controller;
 
+import com.globalshopper.GlobalShopper.dto.request.CategorieRequestDTO;
+import com.globalshopper.GlobalShopper.dto.response.CategorieResponseDTO;
 import com.globalshopper.GlobalShopper.entity.Categorie;
 import com.globalshopper.GlobalShopper.service.CategorieService;
 import lombok.AllArgsConstructor;
@@ -20,22 +22,22 @@ public class CategorieController {
     }
 
     @PostMapping
-    public ResponseEntity<Categorie> createCaterogi(@RequestBody Categorie categorie){
+    public ResponseEntity<CategorieResponseDTO> createCaterogi(@RequestBody CategorieRequestDTO categorie){
         return ResponseEntity.status(HttpStatus.CREATED).body(categorieService.createCategorie(categorie));
     }
 
     @GetMapping
-    public ResponseEntity<List<Categorie>> getAllCategorie(){
+    public ResponseEntity<List<CategorieResponseDTO>> getAllCategorie(){
         return ResponseEntity.ok(categorieService.getAllCategorie());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Categorie> trouverUneCategorie(@PathVariable Long id){
+    public ResponseEntity<CategorieResponseDTO> trouverUneCategorie(@PathVariable Long id){
         return ResponseEntity.ok(categorieService.getACategorie(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Categorie> updateCategorie(@PathVariable Long id ,@RequestBody Categorie categorie){
+    public ResponseEntity<CategorieResponseDTO> updateCategorie(@PathVariable Long id ,@RequestBody CategorieRequestDTO  categorie){
         return ResponseEntity.ok(categorieService.updateCategorie(id,categorie));
     }
 
