@@ -27,8 +27,8 @@ public class ProduitController {
 
     @PostMapping(consumes = {"multipart/form-data"})
     public ResponseEntity<ProduitResponseDTO> ajouterProduit(
-            @RequestPart("produit") String produitRequest, // ton JSON
-            @RequestPart(value = "images", required = true) MultipartFile[] images     // tes fichiers
+            @RequestPart("produit") String produitRequest,
+            @RequestPart(value = "images", required = true) MultipartFile[] images
     ) throws IOException {
         ProduitRequestDTO dto = objectMapper.readValue(produitRequest, ProduitRequestDTO.class);
         return ResponseEntity.status(HttpStatus.CREATED).body(produitService.ajouterProduit(dto,images));

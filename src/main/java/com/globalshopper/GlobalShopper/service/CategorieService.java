@@ -21,6 +21,7 @@ public class CategorieService {
 
     public CategorieResponseDTO createCategorie (CategorieRequestDTO categorie){
         Categorie cate = CategorieMapper.toEntity(categorie, new Categorie());
+        repository.save(cate);
         return CategorieMapper.toResponse(cate);
     }
 

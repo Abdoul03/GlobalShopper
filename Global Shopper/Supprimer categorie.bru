@@ -1,11 +1,11 @@
 meta {
-  name: get all categorie
+  name: Supprimer categorie
   type: http
-  seq: 19
+  seq: 20
 }
 
-get {
-  url: {{baseUrl}}/categorie
+delete {
+  url: {{baseUrl}}/categorie/2
   body: json
   auth: bearer
 }
