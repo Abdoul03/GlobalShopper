@@ -17,8 +17,8 @@ import java.util.List;
 @RestController
 @RequestMapping("produits")
 public class ProduitController {
-    private ProduitService produitService;
-    private ObjectMapper objectMapper;
+    private final ProduitService produitService;
+    private final ObjectMapper objectMapper;
 
     public ProduitController(ProduitService produitService, ObjectMapper objectMapper) {
         this.produitService = produitService;
@@ -32,6 +32,11 @@ public class ProduitController {
     ) throws IOException {
         ProduitRequestDTO dto = objectMapper.readValue(produitRequest, ProduitRequestDTO.class);
         return ResponseEntity.status(HttpStatus.CREATED).body(produitService.ajouterProduit(dto,images));
+    }
+
+    @GetMapping("/fournisseur")
+    public ResponseEntity<List<ProduitResponseDTO>> trouverLesProduitsDuFournisseur(){
+        return ResponseEntity.ok(produitService.getProduitBySupplierId());
     }
 
     @GetMapping

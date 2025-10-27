@@ -118,6 +118,22 @@ public class ProduitService {
         return produits.stream().map(ProduitMapper::toResponse).toList();
     }
 
+    //Get produit by fournisseur Id
+    public List<ProduitResponseDTO> getProduitBySupplierId(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long fournisseurId = Long.valueOf(authentication.getPrincipal().toString());
+
+        if (authentication.getAuthorities().stream()
+                .noneMatch(a -> a.getAuthority().equals("ROLE_FOURNISSEUR"))) {
+            throw new RuntimeException("Seules les fournisseur peuvent acceder a cette methode");
+        }
+
+        List<Produit> produits = repository.findByFournisseurId(fournisseurId);
+
+        return produits.stream().map(ProduitMapper ::toResponse).toList();
+
+    }
+
     //get a produit
     public ProduitResponseDTO getAProduict(long id){
         Produit produit = repository.findById(id).orElseThrow(()-> new EntityNotFoundException("Produit introuvable"));
