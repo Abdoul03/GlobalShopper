@@ -3,7 +3,6 @@ package com.globalshopper.GlobalShopper.service;
 import com.globalshopper.GlobalShopper.dto.mapper.CommandeGroupeeMapper;
 import com.globalshopper.GlobalShopper.dto.request.ParticipationRequestDTO;
 import com.globalshopper.GlobalShopper.dto.response.CommandeGroupeeResponseDTO;
-import com.globalshopper.GlobalShopper.dto.response.CommercantResponseDTO;
 import com.globalshopper.GlobalShopper.entity.*;
 import com.globalshopper.GlobalShopper.entity.enums.OrderStatus;
 import com.globalshopper.GlobalShopper.repository.*;
@@ -198,6 +197,25 @@ public class CommandeGroupeeService {
         commandeGroupeeRepository.save(commande);
 
         return CommandeGroupeeMapper.toResponse(commande);
+    }
+
+    public List<CommandeGroupeeResponseDTO> getAllCommandeGrouper(){
+        List<CommandeGroupee>  commandeGroupee = commandeGroupeeRepository.findAll();
+        return commandeGroupee.stream().map(CommandeGroupeeMapper :: toResponse).toList();
+    }
+
+    public CommandeGroupeeResponseDTO getAOrderGroupe(int commandeId){
+        CommandeGroupee commandeGroupee = commandeGroupeeRepository.findById(commandeId).orElseThrow(
+                ()-> new EntityNotFoundException("Commande groupée introuvable")
+        );
+        return CommandeGroupeeMapper.toResponse(commandeGroupee);
+    }
+
+    public boolean deleteOrderGroup(int commandeId){
+        CommandeGroupee commandeGroupee = commandeGroupeeRepository.findById(commandeId).orElseThrow(
+                ()-> new EntityNotFoundException("Commande groupée introuvable")
+        );
+        return true;
     }
 
 

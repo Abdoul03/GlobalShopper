@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("commandeGroupee")
@@ -33,5 +34,20 @@ public class CommandeGrooupeeController {
             @RequestBody ParticipationRequestDTO participationRequestDTO
     ){
         return ResponseEntity.ok(commandeGroupeeService.rejoindreUneCommandeGroupee(produitId, participationRequestDTO));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CommandeGroupeeResponseDTO>> getAllCommande(){
+        return ResponseEntity.ok(commandeGroupeeService.getAllCommandeGrouper());
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<CommandeGroupeeResponseDTO> getAGroupeOrder(@PathVariable int id){
+        return ResponseEntity.ok(commandeGroupeeService.getAOrderGroupe(id));
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Boolean> deleteGroupOrder(@PathVariable int id){
+        return ResponseEntity.ok(commandeGroupeeService.deleteOrderGroup(id));
     }
 }
