@@ -5,6 +5,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -47,6 +48,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(error);
     }
 
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ApiError> handleBadCredentials(BadCredentialsException ex) {
+        ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED, "Identifiant ou mot de passe incorrect.");
+        return new ResponseEntity<>(apiError, HttpStatus.UNAUTHORIZED);
+    }
+
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiError> handleJsonParsing(HttpMessageNotReadableException ex) {
         ApiError error = new ApiError(HttpStatus.BAD_REQUEST, "Le JSON du champ 'produit' est invalide ou mal formé.");
@@ -58,6 +66,4 @@ public class GlobalExceptionHandler {
         ApiError error = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, "Erreur interne du serveur : " + ex.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
-
-
 }
