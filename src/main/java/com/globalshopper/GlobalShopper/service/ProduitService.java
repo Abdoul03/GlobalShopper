@@ -134,6 +134,12 @@ public class ProduitService {
 
     }
 
+    // for other users
+    public List<ProduitResponseDTO> getProduitByfournisseurId(long id){
+        List<Produit> produits = repository.findByFournisseurId(id);
+        return produits.stream().map(ProduitMapper ::toResponse).toList();
+    }
+
     //get a produit
     public ProduitResponseDTO getAProduict(long id){
         Produit produit = repository.findById(id).orElseThrow(()-> new EntityNotFoundException("Produit introuvable"));
