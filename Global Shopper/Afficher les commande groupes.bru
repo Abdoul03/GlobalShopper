@@ -1,0 +1,20 @@
+meta {
+  name: Afficher les commande groupes
+  type: http
+  seq: 21
+}
+
+get {
+  url: http://localhost:8080/api/commandeGroupee
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0IiwidHlwZSI6IkFDQ0VTU19UT0tFTiIsInJvbGUiOiJST0xFX0NPTU1FUkNBTlQiLCJpYXQiOjE3NjE3NjMxMDAsImV4cCI6MTc2MTc2NDAwMH0.g8KkvJqd-_HpIYy5wjXJ6f5BfKCnplViDYQx57sxpHc
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

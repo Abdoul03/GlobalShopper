@@ -39,33 +39,32 @@ public class PayementService {
             throw new IllegalArgumentException("La participation ne peut pas être nulle");
         }
 
+        Wallet wallet = walletRepository.findByNumero("71267813").orElseThrow(() -> new IllegalStateException("Le wallet global est introuvable"));;
+
         Transaction transaction = new Transaction();
         transaction.setMontant(participation.getMontant());
         transaction.setTransactionType(TransactionType.RESERVATION);
         transaction.setDate(LocalDate.now());
         transaction.setParticipation(participation);
+        transaction.setMethodeDePayement(MethodeDePayement.ORANGE_MONEY);
 
         // Simulation du paiement
         boolean paiementReussi = simulerPaiement(participation.getMontant());
 
         if (paiementReussi) {
             transaction.setStatut(Statut.EFFECTUER);
-            transaction.setMethodeDePayement(MethodeDePayement.ORANGE_MONEY);
+            transaction.setWallet(wallet);
             transactionRepository.save(transaction);
         } else {
             transaction.setStatut(Statut.ANNULER);
             transaction.setMethodeDePayement(MethodeDePayement.ORANGE_MONEY);
         }
 
-        // Sauvegarde de la transaction
-       // transactionRepository.save(transaction);
-
         List<Transaction> listTransaction = new ArrayList<>();
         listTransaction.add(transaction);
 
         // Si paiement réussi, créer ou mettre à jour le wallet
         if (paiementReussi) {
-            Wallet wallet = new Wallet();
             wallet.setMontant(transaction.getMontant());
             wallet.setStatut(Statut.EFFECTUER);
             wallet.setMiseAjour(LocalDate.now());
@@ -73,6 +72,8 @@ public class PayementService {
 
             walletRepository.save(wallet);
         } else {
+            transaction.setStatut(Statut.ANNULER);
+            transactionRepository.save(transaction);
             throw new RuntimeException("Le paiement a échoué pour un montant de : " + participation.getMontant());
         }
 

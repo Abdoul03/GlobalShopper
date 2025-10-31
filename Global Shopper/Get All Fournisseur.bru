@@ -1,0 +1,20 @@
+meta {
+  name: Get All Fournisseur
+  type: http
+  seq: 22
+}
+
+get {
+  url: {{baseUrl}}/fournisseur
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0IiwidHlwZSI6IkFDQ0VTU19UT0tFTiIsInJvbGUiOiJST0xFX0NPTU1FUkNBTlQiLCJpYXQiOjE3NjE4OTY0NjYsImV4cCI6MTc2MTg5NzM2Nn0.qM3Jd0D1KOfHi-oc_629TsL_8IyDAwY7Vpajj6CVGrQ
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

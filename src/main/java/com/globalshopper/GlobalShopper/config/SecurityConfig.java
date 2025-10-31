@@ -3,6 +3,7 @@ package com.globalshopper.GlobalShopper.config;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -46,7 +47,7 @@ public class SecurityConfig {
                                     .requestMatchers("/pays").hasRole("ADMIN")
                                     .requestMatchers("/images/**").permitAll()
                                     .requestMatchers("/categorie").hasAnyRole("FOURNISSEUR","ADMIN","COMMERCANT")
-                                    .requestMatchers("/fournisseur/**").hasAnyRole("FOURNISSEUR","ADMIN")
+                                    .requestMatchers("/fournisseur/**").hasAnyRole("FOURNISSEUR","ADMIN","COMMERCANT")
                                     .requestMatchers("/commercant/**").hasAnyRole("COMMERCANT","ADMIN")
                                     .anyRequest().authenticated();
 

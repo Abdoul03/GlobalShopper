@@ -73,6 +73,7 @@ public class CommandeGroupeeService {
             participation.setQuantite(participationDTO.quantite());
             participation.setCommercant(commercant);
             participation.setMontant(montant);
+            participation.setCommandeGroupee(commandeGroupee);
 
             payementService.effectuerPayement(participation);
 
@@ -139,6 +140,7 @@ public class CommandeGroupeeService {
             participation.setQuantite(quantiteDemandee);
             participation.setCommercant(commercant);
             participation.setMontant(montant);
+            participation.setCommandeGroupee(commandeGroupee);
 
             payementService.effectuerPayement(participation);
             participationRepository.save(participation);

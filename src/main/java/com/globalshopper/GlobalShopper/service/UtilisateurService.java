@@ -20,4 +20,5 @@ public class UtilisateurService {
         List<Utilisateur> user = utilisateurRepository.findAll();
         return user;
     }
+
 }
