@@ -220,14 +220,15 @@ public class CommandeGroupeeService {
         return true;
     }
 
-
-    public Optional<List<CommandeGroupee>> allOrderCreateByTrader(long commercantId){
-        Optional<List<CommandeGroupee>> commande = commandeGroupeeRepository.findAllByCommercantId(commercantId);
-        return  commande;
+    public List<CommandeGroupeeResponseDTO> allOrderCreateByTrader(long commercantId){
+        List<CommandeGroupee> commande = commandeGroupeeRepository.findAllByCommercantId(
+                commercantId).orElseThrow(()-> new EntityNotFoundException("Commande goupée not fund")
+        );
+        return  commande.stream().map(CommandeGroupeeMapper::toResponse).toList();
     }
 
-    public CommandeGroupeeResponseDTO orderCreateByTrader(long commandeId){
-        CommandeGroupee commandeGroupee = commandeGroupeeRepository.findByCommercantId(commandeId).orElseThrow(
+    public CommandeGroupeeResponseDTO orderCreateByTrader(long commercantId){
+        CommandeGroupee commandeGroupee = commandeGroupeeRepository.findByCommercantId(commercantId).orElseThrow(
                 ()-> new EntityNotFoundException("Commande introuvable"));
 
         return CommandeGroupeeMapper.toResponse(commandeGroupee);
