@@ -13,9 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CommandeGroupeeService {
@@ -25,16 +23,18 @@ public class CommandeGroupeeService {
     private final ParticipationRepository participationRepository;
     private final ProduitRepository produitRepository;
     private final PayementService payementService;
+    private final FournisseurRepository fournisseurRepository;
 
     public CommandeGroupeeService(CommandeGroupeeRepository commandeGroupeeRepository, CommercantRepository commercantRepository,
                                   ParticipationRepository participationRepository, ProduitRepository produitRepository,
-                                  PayementService payementService)
+                                  PayementService payementService, FournisseurRepository fournisseurRepository)
     {
         this.commandeGroupeeRepository = commandeGroupeeRepository;
         this.commercantRepository = commercantRepository;
         this.participationRepository = participationRepository;
         this.produitRepository = produitRepository;
         this.payementService = payementService;
+        this.fournisseurRepository = fournisseurRepository;
     }
 
     @Transactional
@@ -234,5 +234,17 @@ public class CommandeGroupeeService {
         return CommandeGroupeeMapper.toResponse(commandeGroupee);
     }
 
+    public List<CommandeGroupeeResponseDTO> allSupplierOrder (long fournisseurId) {
+        Fournisseur fournisseur = fournisseurRepository.findById(fournisseurId).orElseThrow(()-> new EntityNotFoundException("Fournisseur introuvable"));
+        List<Produit> produits = produitRepository.findByFournisseurId(fournisseur.getId());
+        //List<CommandeGroupee> commandes = new ArrayList<>();
+        Set<CommandeGroupee> commandes = new HashSet<>();
+        for (Produit produit : produits){
+            if (produit.getCommandeGroupees() != null) {
+                commandes.addAll(produit.getCommandeGroupees());
+            }
+        }
+        return commandes.stream().map(CommandeGroupeeMapper :: toResponse).toList();
+    }
 
 }

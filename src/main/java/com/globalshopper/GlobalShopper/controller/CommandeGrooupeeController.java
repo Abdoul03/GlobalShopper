@@ -53,6 +53,11 @@ public class CommandeGrooupeeController {
         return ResponseEntity.ok(commandeGroupeeService.orderCreateByTrader(commercantId));
     }
 
+    @GetMapping("fournisseur/{id}")
+    public ResponseEntity<List<CommandeGroupeeResponseDTO>> commandeFournisseur(@PathVariable long id){
+        return ResponseEntity.ok(commandeGroupeeService.allSupplierOrder(id));
+    }
+
     @GetMapping
     public ResponseEntity<List<CommandeGroupeeResponseDTO>> getAllCommande(){
         return ResponseEntity.ok(commandeGroupeeService.getAllCommandeGrouper());
