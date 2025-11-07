@@ -1,7 +1,27 @@
+#Build du projet avec maven et eclipse-temurin
+FROM maven:3.9.11-eclipse-temurin-17 AS build
+
+WORKDIR /app
+#copy
+COPY GlobalShopper/pom.xml .
+COPY GlobalShopper/.mvn .mvn
+COPY GlobalShopper/mvnw .
+# Donner les permissions d'exécution au wrapper Maven
+RUN chmod +x mvnw
+# Télécharger les dépendances pour accélérer les builds
+RUN ./mvnw dependency:go-offline
+#COPY le code
+COPY GlobalShopper/src ./src
+# Compiler le projet sans exécuter les tests
+RUN ./mvnw clean package -DskipTests
+
+#image final avec eclipse-temurin
 FROM eclipse-temurin:17-jdk
 
 WORKDIR /app
-
-COPY /app/target/*.jar globalShopper.jar
+# Copier le jar depuis l'étape de build
+COPY --from=build /app/target/*.jar globalShopper.jar
+# Exposer le port sur lequel l'application va tourner
 EXPOSE 8080
+# Lancer l'application en prenant en compte la variable PORT
 ENTRYPOINT ["java", "-jar", "globalShopper.jar --server.port=${PORT:-8080}"]
