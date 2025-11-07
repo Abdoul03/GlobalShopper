@@ -1,5 +1,5 @@
 #Build du projet avec maven et eclipse-temurin
-FROM maven:3.9.11-eclipse-temurin-17 AS build
+FROM maven:3.9.11-eclipse-temurin-21 AS build
 
 WORKDIR /app
 #copy
@@ -16,7 +16,7 @@ COPY src ./src
 RUN ./mvnw clean package -DskipTests
 
 #image final avec eclipse-temurin
-FROM eclipse-temurin:17-jdk
+FROM eclipse-temurin:21-jdk
 
 WORKDIR /app
 # Copier le jar depuis l'étape de build
