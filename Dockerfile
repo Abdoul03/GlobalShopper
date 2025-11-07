@@ -3,15 +3,15 @@ FROM maven:3.9.11-eclipse-temurin-17 AS build
 
 WORKDIR /app
 #copy
-COPY GlobalShopper/pom.xml .
-COPY GlobalShopper/.mvn .mvn
-COPY GlobalShopper/mvnw .
+COPY pom.xml .
+COPY .mvn .mvn
+COPY mvnw .
 # Donner les permissions d'exécution au wrapper Maven
 RUN chmod +x mvnw
 # Télécharger les dépendances pour accélérer les builds
 RUN ./mvnw dependency:go-offline
 #COPY le code
-COPY GlobalShopper/src ./src
+COPY src ./src
 # Compiler le projet sans exécuter les tests
 RUN ./mvnw clean package -DskipTests
 
