@@ -1,0 +1,20 @@
+meta {
+  name: commande d'un fournsseur par
+  type: http
+  seq: 24
+}
+
+get {
+  url: {{baseUrl}}/commandeGroupee/fournisseur/2
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0IiwidHlwZSI6IkFDQ0VTU19UT0tFTiIsInJvbGUiOiJST0xFX0NPTU1FUkNBTlQiLCJpYXQiOjE3NjIwMDQ2MjEsImV4cCI6MTc2MjAwNTUyMX0.HzjA7CzA-AkFk0T5gk97RB0e5mHFNnSvn7j7izfIA7w
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
