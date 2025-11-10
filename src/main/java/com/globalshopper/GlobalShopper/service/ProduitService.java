@@ -30,8 +30,9 @@ public class ProduitService {
     private final CategorieRepository categorieRepository;
 
     //chemin de images de
+    private final String S = File.separator;
     private final String userHome = System.getProperty("user.home");
-    private final String UPLOAD_DIR = userHome + File.separator + "Desktop";
+    private final String UPLOAD_DIR = userHome + S + "Desktop" + S + "uploads" + S + "produits";
 
     public ProduitService(ProduitRepository repository,
                           CaracteristiqueRepository caracteristiqueRepository,
