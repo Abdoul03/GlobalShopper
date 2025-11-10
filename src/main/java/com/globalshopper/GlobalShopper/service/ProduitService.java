@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -28,7 +29,9 @@ public class ProduitService {
     private final MediaRepository mediaRepository;
     private final CategorieRepository categorieRepository;
 
-    private final String UPLOAD_DIR = "uploads/produits";
+    //chemin de images de
+    private final String userHome = System.getProperty("user.home");
+    private final String UPLOAD_DIR = userHome + File.separator + "Desktop";
 
     public ProduitService(ProduitRepository repository,
                           CaracteristiqueRepository caracteristiqueRepository,

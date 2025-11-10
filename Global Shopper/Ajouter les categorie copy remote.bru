@@ -1,0 +1,26 @@
+meta {
+  name: Ajouter les categorie copy remote
+  type: http
+  seq: 25
+}
+
+post {
+  url: https://globalshopper.onrender.com/api/categorie
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwidHlwZSI6IkFDQ0VTU19UT0tFTiIsInJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzYxMDk4MjYzLCJleHAiOjE3NjEwOTkxNjN9.zTNp9GmuzPs843ePY9n_8wlg8bY1hlz71KIAF-aDUeM
+}
+
+body:json {
+  {
+    "nom":"Tech"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
