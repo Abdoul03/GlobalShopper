@@ -24,4 +24,4 @@ COPY --from=build /app/target/*.jar globalShopper.jar
 # Exposer le port sur lequel l'application va tourner
 EXPOSE 8080
 # Lancer l'application en prenant en compte la variable PORT
-ENTRYPOINT ["java", "-jar", "globalShopper.jar --server.port=${PORT:-8080}"]
+ENTRYPOINT ["java", "-jar", "globalShopper.jar"]
