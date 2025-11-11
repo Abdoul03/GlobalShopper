@@ -1,0 +1,20 @@
+meta {
+  name: Supprimer un produit
+  type: http
+  seq: 26
+}
+
+delete {
+  url: http://localhost:8080/api/produits/1
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0IiwidHlwZSI6IkFDQ0VTU19UT0tFTiIsInJvbGUiOiJST0xFX0ZPVVJOSVNTRVVSIiwiaWF0IjoxNzYyODc1OTAzLCJleHAiOjE3NjI4NzY4MDN9.VK0R6kFvy70npYgoq7vfRcWudgi2HG5Fv4QtOn6OAaI
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
