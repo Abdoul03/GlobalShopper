@@ -42,7 +42,7 @@ public class ProduitMapper {
                 .map(c -> new CaracteristiqueResponseDTO(c.getId(), c.getNom(), c.getValeur()))
                 .collect(Collectors.toList());
         List<MediaResponseDTO>  mediaDTO = produit.getMedia().stream()
-                .map(m -> new MediaResponseDTO(m.getId(), m.getFileName(), m.getFileType(), m.getFilePath())).collect(Collectors.toList());
+                .map(m -> new MediaResponseDTO(m.getId(), m.getFileName(), m.getFileType(), m.getFilePath(), m.getWebPath())).collect(Collectors.toList());
 
         FournisseurResponseDTO fournisseurDTO = getResponseDTO(produit);
 

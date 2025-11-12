@@ -4,6 +4,7 @@ public record MediaResponseDTO(
         long id,
         String fileName,
         String fileType,
-        String filePath
+        String filePath,
+        String webPath
 ) {
 }
