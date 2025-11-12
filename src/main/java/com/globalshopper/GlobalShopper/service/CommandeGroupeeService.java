@@ -53,7 +53,7 @@ public class CommandeGroupeeService {
         Optional<CommandeGroupee> commandeExistanteOpt = commandeGroupeeRepository.findByProduitAndStatus(produit, OrderStatus.ENCOURS);
 
 
-        CommandeGroupee commandeGroupee = null;
+        CommandeGroupee commandeGroupee;
 
         if (commandeExistanteOpt.isEmpty()){
             //Creer une commande groupée si le produit n'a pas de commande
@@ -73,7 +73,6 @@ public class CommandeGroupeeService {
             participation.setQuantite(participationDTO.quantite());
             participation.setCommercant(commercant);
             participation.setMontant(montant);
-            participation.setCommandeGroupee(commandeGroupee);
 
             payementService.effectuerPayement(participation);
 
@@ -92,12 +91,53 @@ public class CommandeGroupeeService {
             commandeGroupee.setDeadline(deadline);
 
             commandeGroupeeRepository.save(commandeGroupee);
-            
+
         } else {
-           rejoindreUneCommandeGroupee(prouitId,participationDTO);
+            // === CAS 2 : Rejoindre une commande existante ===
+            commandeGroupee = commandeExistanteOpt.get();
+
+            // Vérifier si le commerçant participe déjà
+            boolean dejaParticipant = commandeGroupee.getParticipations().stream()
+                    .anyMatch(p -> p.getCommercant().getId() == commercant.getId());
+
+            if (dejaParticipant) {
+                throw new RuntimeException("Vous participez déjà à cette commande groupée");
+            }
+
+            int quantiteDemandee = participationDTO.quantite();
+            int nouvelleQuantite = commandeGroupee.getQuaniteActuelle() + quantiteDemandee;
+
+            if (nouvelleQuantite > commandeGroupee.getQuantiteRequis()) {
+                throw new RuntimeException("Impossible de rejoindre : quantité requise déjà atteinte ou dépassée");
+            }
+
+            double montant = quantiteDemandee * produit.getPrix();
+
+            Participation participation = new Participation();
+            participation.setData(LocalDate.now());
+            participation.setQuantite(quantiteDemandee);
+            participation.setCommercant(commercant);
+            participation.setMontant(montant);
+
+            payementService.effectuerPayement(participation);
+            participationRepository.save(participation);
+
+            commandeGroupee.getParticipations().add(participation);
+            commandeGroupee.setQuaniteActuelle(nouvelleQuantite);
+            commandeGroupee.setMontant(commandeGroupee.getMontant() + montant);
+
+            // Si la quantité requise est atteinte → cloture automatique
+            if (nouvelleQuantite >= commandeGroupee.getQuantiteRequis()) {
+                commandeGroupee.setStatus(OrderStatus.TERMINER);
+                payementService.payementFournisseur(commandeGroupee.getId());
+            }
+
+            commandeGroupeeRepository.save(commandeGroupee);
         }
+
         return CommandeGroupeeMapper.toResponse(commandeGroupee);
     }
+
 
     public CommandeGroupeeResponseDTO rejoindreUneCommandeGroupee(long prouitId, ParticipationRequestDTO participationDTO){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

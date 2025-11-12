@@ -43,12 +43,12 @@ public class CommandeGrooupeeController {
         return ResponseEntity.ok(commandeGroupeeService.retirerParticipation(commandeId));
     }
 
-    @GetMapping("commercant/all/{idCommande}")
+    @GetMapping("commercant/all/{commercantId}")
     public ResponseEntity<List<CommandeGroupeeResponseDTO>> allGetOrdersCreateByTrader(@PathVariable long commercantId){
         return ResponseEntity.ok(commandeGroupeeService.allOrderCreateByTrader(commercantId));
     }
 
-    @GetMapping("commercant/{idCommande}")
+    @GetMapping("commercant/{commercantId)}")
     public ResponseEntity<CommandeGroupeeResponseDTO> getOrdersCreateByTrader(@PathVariable long commercantId){
         return ResponseEntity.ok(commandeGroupeeService.orderCreateByTrader(commercantId));
     }
