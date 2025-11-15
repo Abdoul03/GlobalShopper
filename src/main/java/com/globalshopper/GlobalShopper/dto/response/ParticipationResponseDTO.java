@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 public record ParticipationResponseDTO(
         int id,
-        CommandeGroupeeResponseDTO commandeGroupeeResponseDTO,
+        long commandeId,
         CommercantResponseDTO commercantResponseDTO,
         LocalDate data,
         int quantite,

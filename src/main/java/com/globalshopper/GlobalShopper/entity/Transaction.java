@@ -1,6 +1,7 @@
 package com.globalshopper.GlobalShopper.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.globalshopper.GlobalShopper.entity.enums.MethodeDePayement;
 import com.globalshopper.GlobalShopper.entity.enums.Statut;
 import com.globalshopper.GlobalShopper.entity.enums.TransactionType;
@@ -48,10 +49,12 @@ public class Transaction {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "participation_id")
+    @JsonBackReference("participation-transaction")
     private Participation participation;
 
     @ManyToOne
     @JoinColumn(name = "wallet_id")
+    @JsonBackReference("wallet-transactions")
     private Wallet wallet;
 
     @ManyToOne

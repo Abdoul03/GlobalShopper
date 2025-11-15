@@ -29,7 +29,8 @@ public class ParticipationMapper {
         if (entity == null) return null;
         return new ParticipationResponseDTO(
                 entity.getId(),
-                CommandeGroupeeMapper.toResponse(entity.getCommandeGroupee()), CommercantMapp.toResponse(entity.getCommercant()),
+                entity.getCommandeGroupee().getId(),
+                CommercantMapp.toResponse(entity.getCommercant()),
                 entity.getData(),
                 entity.getQuantite(),
                 entity.getMontant(),
