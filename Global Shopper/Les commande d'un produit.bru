@@ -1,0 +1,20 @@
+meta {
+  name: Les commande d'un produit
+  type: http
+  seq: 27
+}
+
+get {
+  url: {{baseUrl}}/commandeGroupee/commercant/2
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0IiwidHlwZSI6IkFDQ0VTU19UT0tFTiIsInJvbGUiOiJST0xFX0NPTU1FUkNBTlQiLCJpYXQiOjE3NjMzMTg4NzYsImV4cCI6MTc2MzMxOTc3Nn0.Xu9jl0k1EvYZKH1XN180vrUOnE9SpVNTCBz1D2ahtzk
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

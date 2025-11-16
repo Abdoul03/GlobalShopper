@@ -247,6 +247,15 @@ public class CommandeGroupeeService {
         return  commande.stream().map(CommandeGroupeeMapper::toResponse).toList();
     }
 
+    public List<CommandeGroupeeResponseDTO> allOrderOfTrader(long commercantId){
+        List<CommandeGroupee> allcommande = commandeGroupeeRepository.findAll();
+
+        return  allcommande.stream().filter(
+                commandeGroupee -> commandeGroupee.getParticipations()
+                        .stream().anyMatch(p -> p.getCommercant().getId() == commercantId))
+                .map(CommandeGroupeeMapper::toResponse).toList();
+    }
+
     public CommandeGroupeeResponseDTO orderCreateByTrader(long commercantId){
         CommandeGroupee commandeGroupee = commandeGroupeeRepository.findByCommercantId(commercantId).orElseThrow(
                 ()-> new EntityNotFoundException("Commande introuvable"));
