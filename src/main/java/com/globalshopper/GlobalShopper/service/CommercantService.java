@@ -58,8 +58,6 @@ public class CommercantService {
         commercant.setUsername(commercantRequestDTO.username());
         commercant.setTelephone(commercantRequestDTO.telephone());
         commercant.setEmail(commercantRequestDTO.email());
-        commercant.setActif(commercantRequestDTO.actif());
-        commercant.setRole(commercantRequestDTO.role());
 
         if (commercantRequestDTO.motDePasse() != null && !commercantRequestDTO.motDePasse().isBlank()) {
             commercant.setMotDePasse(passwordEncoder.encode(commercantRequestDTO.motDePasse()));
