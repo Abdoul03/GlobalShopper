@@ -52,9 +52,9 @@ public class CommercantService {
     //Update
     public CommercantResponseDTO updateCommercant (long commercantId, CommercantRequestDTO commercantRequestDTO){
         Commercant commercant = commercantRepository.findById(commercantId).orElseThrow(()-> new EntityNotFoundException("Commercant introuvable"));
-
-        commercantRepository.save(commercant);
-        return CommercantMapp.toResponse(commercant);
+        Commercant commercantMisAJour = CommercantMapp.toEntity(commercantRequestDTO, commercant);
+        Commercant commercantSauvegarde = commercantRepository.save(commercantMisAJour);
+        return CommercantMapp.toResponse(commercantSauvegarde);
     }
 
     //Delete
