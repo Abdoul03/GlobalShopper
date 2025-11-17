@@ -52,9 +52,21 @@ public class CommercantService {
     //Update
     public CommercantResponseDTO updateCommercant (long commercantId, CommercantRequestDTO commercantRequestDTO){
         Commercant commercant = commercantRepository.findById(commercantId).orElseThrow(()-> new EntityNotFoundException("Commercant introuvable"));
-        Commercant commercantMisAJour = CommercantMapp.toEntity(commercantRequestDTO, commercant);
-        Commercant commercantSauvegarde = commercantRepository.save(commercantMisAJour);
-        return CommercantMapp.toResponse(commercantSauvegarde);
+
+        commercant.setNom(commercantRequestDTO.nom());
+        commercant.setPrenom(commercantRequestDTO.prenom());
+        commercant.setUsername(commercantRequestDTO.username());
+        commercant.setTelephone(commercantRequestDTO.telephone());
+        commercant.setEmail(commercantRequestDTO.email());
+        commercant.setActif(commercantRequestDTO.actif());
+        commercant.setRole(commercantRequestDTO.role());
+
+        if (commercantRequestDTO.motDePasse() != null && !commercantRequestDTO.motDePasse().isBlank()) {
+            commercant.setMotDePasse(passwordEncoder.encode(commercantRequestDTO.motDePasse()));
+        }
+
+        commercantRepository.save(commercant);
+        return CommercantMapp.toResponse(commercant);
     }
 
     //Delete
