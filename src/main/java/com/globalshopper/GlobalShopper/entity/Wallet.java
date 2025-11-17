@@ -1,6 +1,7 @@
 package com.globalshopper.GlobalShopper.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.globalshopper.GlobalShopper.entity.enums.Statut;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -35,6 +36,7 @@ public class Wallet {
     private Statut statut;
 
     @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL)
+    @JsonManagedReference("wallet-transactions")
     private List<Transaction> transactions;
 
     private String numero;

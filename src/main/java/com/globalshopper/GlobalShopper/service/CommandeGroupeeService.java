@@ -38,7 +38,7 @@ public class CommandeGroupeeService {
     }
 
     @Transactional
-    public CommandeGroupeeResponseDTO createUneCommandeGroupee(long prouitId, ParticipationRequestDTO participationDTO, LocalDate deadline){
+    public CommandeGroupeeResponseDTO createUneCommandeGroupee(long produitId, ParticipationRequestDTO participationDTO, LocalDate deadline) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long conmercantId = Long.valueOf(authentication.getPrincipal().toString());
 
@@ -48,98 +48,68 @@ public class CommandeGroupeeService {
         }
 
         Commercant commercant = commercantRepository.findById(conmercantId).orElseThrow(()-> new EntityNotFoundException("commercant introuvable"));
-        Produit produit = produitRepository.findById(prouitId).orElseThrow(()-> new EntityNotFoundException("Prouduit introuvable"));
+        Produit produit = produitRepository.findById(produitId).orElseThrow(()-> new EntityNotFoundException("Prouduit introuvable"));
 
         Optional<CommandeGroupee> commandeExistanteOpt = commandeGroupeeRepository.findByProduitAndStatus(produit, OrderStatus.ENCOURS);
 
-
-        CommandeGroupee commandeGroupee;
-
-        if (commandeExistanteOpt.isEmpty()){
-            //Creer une commande groupée si le produit n'a pas de commande
-
-            commandeGroupee = new CommandeGroupee();
-
-            Participation participation = new Participation();
-
-            List<Participation> listParticipant = new ArrayList<>();
-
-            if (produit.getMoq() < commandeGroupee.getQuantiteRequis()){
-                throw new RuntimeException("la quantité requise ne peux pas etre supperieur a la quantitée minimun de commande");
-            }
-            double montant = participationDTO.quantite() * produit.getPrix();
-
-            participation.setData(LocalDate.now());
-            participation.setQuantite(participationDTO.quantite());
-            participation.setCommercant(commercant);
-            participation.setMontant(montant);
-
-            payementService.effectuerPayement(participation);
-
-            participationRepository.save(participation);
-
-            listParticipant.add(participation);
-
-            commandeGroupee.setDateDebut(LocalDate.now());
-            commandeGroupee.setQuantiteRequis(produit.getMoq());
-            commandeGroupee.setMontant(montant);
-            commandeGroupee.setProduit(produit);
-            commandeGroupee.setCommercant(commercant);
-            commandeGroupee.setQuaniteActuelle(participation.getQuantite());
-            commandeGroupee.setStatus(OrderStatus.ENCOURS);
-            commandeGroupee.setParticipations(listParticipant);
-            commandeGroupee.setDeadline(deadline);
-
-            commandeGroupeeRepository.save(commandeGroupee);
-
-        } else {
-            // === CAS 2 : Rejoindre une commande existante ===
-            commandeGroupee = commandeExistanteOpt.get();
-
-            // Vérifier si le commerçant participe déjà
-            boolean dejaParticipant = commandeGroupee.getParticipations().stream()
-                    .anyMatch(p -> p.getCommercant().getId() == commercant.getId());
-
-            if (dejaParticipant) {
-                throw new RuntimeException("Vous participez déjà à cette commande groupée");
-            }
-
-            int quantiteDemandee = participationDTO.quantite();
-            int nouvelleQuantite = commandeGroupee.getQuaniteActuelle() + quantiteDemandee;
-
-            if (nouvelleQuantite > commandeGroupee.getQuantiteRequis()) {
-                throw new RuntimeException("Impossible de rejoindre : quantité requise déjà atteinte ou dépassée");
-            }
-
-            double montant = quantiteDemandee * produit.getPrix();
-
-            Participation participation = new Participation();
-            participation.setData(LocalDate.now());
-            participation.setQuantite(quantiteDemandee);
-            participation.setCommercant(commercant);
-            participation.setMontant(montant);
-
-            payementService.effectuerPayement(participation);
-            participationRepository.save(participation);
-
-            commandeGroupee.getParticipations().add(participation);
-            commandeGroupee.setQuaniteActuelle(nouvelleQuantite);
-            commandeGroupee.setMontant(commandeGroupee.getMontant() + montant);
-
-            // Si la quantité requise est atteinte → cloture automatique
-            if (nouvelleQuantite >= commandeGroupee.getQuantiteRequis()) {
-                commandeGroupee.setStatus(OrderStatus.TERMINER);
-                payementService.payementFournisseur(commandeGroupee.getId());
-            }
-
-            commandeGroupeeRepository.save(commandeGroupee);
+        // 1. VÉRIFICATION D'EXISTENCE
+        if (commandeExistanteOpt.isPresent()) {
+            throw new RuntimeException("Une commande groupée est déjà EN COURS pour ce produit. Veuillez la rejoindre ou attendre qu'elle soit terminée.");
         }
+
+        // 2. VÉRIFICATION MOQ
+        CommandeGroupee commandeGroupee = new CommandeGroupee();
+
+        // 3. VÉRIFICATION QUANTITÉ DE PARTICIPATION
+        if (participationDTO.quantite() > produit.getMoq()) {
+            throw new RuntimeException("La quantité de votre participation initiale (" + participationDTO.quantite() + ") ne peut pas dépasser la quantité requise du groupe (" + produit.getMoq() + ").");
+        }
+
+        // --- 1. CRÉATION ET PERSISTANCE PRÉALABLE DE COMMANDEGROUPÉE ---
+        commandeGroupee.setQuantiteRequis(produit.getMoq());
+        commandeGroupee.setDateDebut(LocalDate.now());
+        commandeGroupee.setProduit(produit);
+        commandeGroupee.setCommercant(commercant); // Commerçant initiateur
+        commandeGroupee.setQuaniteActuelle(0);
+        commandeGroupee.setStatus(OrderStatus.ENCOURS);
+        commandeGroupee.setDeadline(deadline);
+        commandeGroupee.setMontant(0.0);
+
+        // **SAUVEGARDE**
+        commandeGroupee = commandeGroupeeRepository.save(commandeGroupee);
+
+        // --- 2. CRÉATION DE LA PARTICIPATION ---
+        double montant = participationDTO.quantite() * produit.getPrix();
+
+        Participation participation = new Participation();
+        participation.setData(LocalDate.now());
+        participation.setQuantite(participationDTO.quantite());
+        participation.setCommercant(commercant);
+        participation.setMontant(montant);
+        participation.setCommandeGroupee(commandeGroupee); // LIEN vers l'objet PERSISTANT
+
+        // --- 3. PAIEMENT ET SAUVEGARDE DE L'ENFANT ---
+        // Le service de paiement va créer/sauvegarder la Transaction, et potentiellement la Participation.
+        payementService.effectuerPayement(participation);
+        // Si la Participation n'est pas sauvée par le service de paiement ou par Cascade, le sauver ici
+        participationRepository.save(participation);
+
+        // --- 4. MISE À JOUR FINALE DE COMMANDEGROUPÉE ---
+        commandeGroupee.setQuaniteActuelle(participation.getQuantite());
+        commandeGroupee.setMontant(montant);
+
+        // Mise à jour de la collection si non gérée par `save(participation)`
+        if (commandeGroupee.getParticipations() == null) {
+            commandeGroupee.setParticipations(new ArrayList<>());
+        }
+        commandeGroupee.getParticipations().add(participation);
+
+        commandeGroupeeRepository.save(commandeGroupee); // Sauvegarde finale des mises à jour
 
         return CommandeGroupeeMapper.toResponse(commandeGroupee);
     }
 
-
-    public CommandeGroupeeResponseDTO rejoindreUneCommandeGroupee(long prouitId, ParticipationRequestDTO participationDTO){
+    public CommandeGroupeeResponseDTO rejoindreUneCommandeGroupee(long produitId, ParticipationRequestDTO participationDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long conmercantId = Long.valueOf(authentication.getPrincipal().toString());
 
@@ -149,56 +119,66 @@ public class CommandeGroupeeService {
         }
 
         Commercant commercant = commercantRepository.findById(conmercantId).orElseThrow(()-> new EntityNotFoundException("commercant introuvable"));
-        Produit produit = produitRepository.findById(prouitId).orElseThrow(()-> new EntityNotFoundException("Prouduit introuvable"));
+        Produit produit = produitRepository.findById(produitId).orElseThrow(()-> new EntityNotFoundException("Prouduit introuvable"));
+        // ... (Vérifications d'authentification et récupération Commercant/Produit) ...
 
         Optional<CommandeGroupee> commandeExistanteOpt = commandeGroupeeRepository.findByProduitAndStatus(produit, OrderStatus.ENCOURS);
 
-        CommandeGroupee commandeGroupee = null;
-        if (commandeExistanteOpt.isPresent()){
-            // === CAS 2 : Rejoindre une commande existante ===
-             commandeGroupee = commandeExistanteOpt.get();
-
-            // Vérifier si le commerçant participe déjà
-            boolean dejaParticipant = commandeGroupee.getParticipations().stream()
-                    .anyMatch(p -> p.getCommercant().getId() == commercant.getId());
-
-            if (dejaParticipant) {
-                throw new RuntimeException("Vous participez déjà à cette commande groupée");
-            }
-
-            int quantiteDemandee = participationDTO.quantite();
-            int nouvelleQuantite = commandeGroupee.getQuaniteActuelle() + quantiteDemandee;
-
-            if (nouvelleQuantite > commandeGroupee.getQuantiteRequis()) {
-                throw new RuntimeException("Impossible de rejoindre : quantité requise déjà atteinte ou dépassée");
-            }
-
-            double montant = quantiteDemandee * produit.getPrix();
-
-            Participation participation = new Participation();
-            participation.setData(LocalDate.now());
-            participation.setQuantite(quantiteDemandee);
-            participation.setCommercant(commercant);
-            participation.setMontant(montant);
-            participation.setCommandeGroupee(commandeGroupee);
-
-            payementService.effectuerPayement(participation);
-            participationRepository.save(participation);
-
-            commandeGroupee.getParticipations().add(participation);
-            commandeGroupee.setQuaniteActuelle(nouvelleQuantite);
-            commandeGroupee.setMontant(commandeGroupee.getMontant() + montant);
-
-            // Si la quantité requise est atteinte → cloture automatique
-            if (nouvelleQuantite >= commandeGroupee.getQuantiteRequis()) {
-                commandeGroupee.setStatus(OrderStatus.TERMINER);
-                payementService.payementFournisseur(commandeGroupee.getId());
-            }
-
-            commandeGroupeeRepository.save(commandeGroupee);
-        }else {
-            createUneCommandeGroupee(prouitId, participationDTO,commandeGroupee.getDeadline());
+        // 1. VÉRIFICATION D'EXISTENCE
+        if (commandeExistanteOpt.isEmpty()) {
+            throw new EntityNotFoundException("Aucune commande groupée EN COURS n'existe pour ce produit (" + produit.getNom() + ").");
+            // Ou
+            // return createUneCommandeGroupee(produitId, participationDTO, LocalDate.now().plusDays(7)); // Utiliser une deadline par défaut
         }
+
+        CommandeGroupee commandeGroupee = commandeExistanteOpt.get();
+
+        // 2. VÉRIFICATION STATUT/DEADLINE
+        if (commandeGroupee.getStatus() != OrderStatus.ENCOURS || (commandeGroupee.getDeadline() != null && commandeGroupee.getDeadline().isBefore(LocalDate.now()))) {
+            throw new RuntimeException("La commande groupée n'est plus en cours ou la deadline est dépassée.");
+        }
+
+        // 3. VÉRIFICATION PARTICIPATION EXISTANTE
+        boolean dejaParticipant = commandeGroupee.getParticipations().stream()
+                .anyMatch(p -> p.getCommercant().getId() == commercant.getId());
+
+        if (dejaParticipant) {
+            throw new RuntimeException("Vous participez déjà à cette commande groupée.");
+        }
+
+        // 4. VÉRIFICATION QUANTITÉ
+        int quantiteDemandee = participationDTO.quantite();
+        int nouvelleQuantite = commandeGroupee.getQuaniteActuelle() + quantiteDemandee;
+
+        if (nouvelleQuantite > commandeGroupee.getQuantiteRequis()) {
+            throw new RuntimeException("Impossible de rejoindre : la quantité demandée dépasse le reste requis. Reste max : " + (commandeGroupee.getQuantiteRequis() - commandeGroupee.getQuaniteActuelle()));
+        }
+
+
+        double montant = quantiteDemandee * produit.getPrix();
+
+        Participation participation = new Participation();
+        participation.setData(LocalDate.now());
+        participation.setQuantite(quantiteDemandee);
+        participation.setCommercant(commercant);
+        participation.setMontant(montant);
+        participation.setCommandeGroupee(commandeGroupee);
+
+        payementService.effectuerPayement(participation);
+
+        // 5. MISE À JOUR ET SAUVEGARDE
+        commandeGroupee.getParticipations().add(participation);
+        commandeGroupee.setQuaniteActuelle(nouvelleQuantite);
+        commandeGroupee.setMontant(commandeGroupee.getMontant() + montant);
+
+        if (nouvelleQuantite >= commandeGroupee.getQuantiteRequis()) {
+            commandeGroupee.setStatus(OrderStatus.TERMINER);
+            payementService.payementFournisseur(commandeGroupee.getId());
+        }
+
+        commandeGroupeeRepository.save(commandeGroupee);
+        participationRepository.save(participation);
+
         return CommandeGroupeeMapper.toResponse(commandeGroupee);
     }
 
@@ -265,6 +245,15 @@ public class CommandeGroupeeService {
                 commercantId).orElseThrow(()-> new EntityNotFoundException("Commande goupée not fund")
         );
         return  commande.stream().map(CommandeGroupeeMapper::toResponse).toList();
+    }
+
+    public List<CommandeGroupeeResponseDTO> allOrderOfTrader(long commercantId){
+        List<CommandeGroupee> allcommande = commandeGroupeeRepository.findAll();
+
+        return  allcommande.stream().filter(
+                commandeGroupee -> commandeGroupee.getParticipations()
+                        .stream().anyMatch(p -> p.getCommercant().getId() == commercantId))
+                .map(CommandeGroupeeMapper::toResponse).toList();
     }
 
     public CommandeGroupeeResponseDTO orderCreateByTrader(long commercantId){

@@ -20,6 +20,7 @@ public class Produit {
     private long id;
 
     private String nom;
+    @Lob
     private String description;
     private double prix;
     private int moq;

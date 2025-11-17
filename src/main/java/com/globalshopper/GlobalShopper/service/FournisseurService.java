@@ -1,8 +1,10 @@
 package com.globalshopper.GlobalShopper.service;
 
+import com.globalshopper.GlobalShopper.dto.mapper.CommercantMapp;
 import com.globalshopper.GlobalShopper.dto.mapper.FournisseurMapper;
 import com.globalshopper.GlobalShopper.dto.request.FournisseurRequestDTO;
 import com.globalshopper.GlobalShopper.dto.response.FournisseurResponseDTO;
+import com.globalshopper.GlobalShopper.entity.Commercant;
 import com.globalshopper.GlobalShopper.entity.Fournisseur;
 import com.globalshopper.GlobalShopper.entity.Pays;
 import com.globalshopper.GlobalShopper.entity.enums.Role;
@@ -46,9 +48,9 @@ public class FournisseurService {
 
     public FournisseurResponseDTO updateFournisseur(Long idFournisseur, FournisseurRequestDTO fournisseurRequestDTO){
         Fournisseur fournisseur = fournisseurRepository.findById(idFournisseur).orElseThrow(()-> new EntityNotFoundException("Fournisseur introuvable"));
-
-        fournisseurRepository.save(fournisseur);
-        return FournisseurMapper.toResponse(fournisseur);
+        Fournisseur fournisseurMisAJour = FournisseurMapper.toEntity(fournisseurRequestDTO, fournisseur);
+        Fournisseur fournisseurSauvegarde = fournisseurRepository.save(fournisseurMisAJour);
+        return FournisseurMapper.toResponse(fournisseurSauvegarde);
     }
 
     public void deleteFournisseur (Long idFournisseur){
