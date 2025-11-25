@@ -48,9 +48,15 @@ public class FournisseurService {
 
     public FournisseurResponseDTO updateFournisseur(Long idFournisseur, FournisseurRequestDTO fournisseurRequestDTO){
         Fournisseur fournisseur = fournisseurRepository.findById(idFournisseur).orElseThrow(()-> new EntityNotFoundException("Fournisseur introuvable"));
-        Fournisseur fournisseurMisAJour = FournisseurMapper.toEntity(fournisseurRequestDTO, fournisseur);
-        Fournisseur fournisseurSauvegarde = fournisseurRepository.save(fournisseurMisAJour);
-        return FournisseurMapper.toResponse(fournisseurSauvegarde);
+        fournisseur.setPrenom(fournisseurRequestDTO.prenom());
+        fournisseur.setNom(fournisseurRequestDTO.nom());
+        fournisseur.setEmail(fournisseurRequestDTO.email());
+        fournisseur.setTelephone(fournisseurRequestDTO.telephone());
+        if (fournisseurRequestDTO.motDePasse() != null && !fournisseurRequestDTO.motDePasse().isBlank()) {
+            fournisseur.setMotDePasse(passwordEncoder.encode(fournisseurRequestDTO.motDePasse()));
+        }
+        fournisseurRepository.save(fournisseur);
+        return FournisseurMapper.toResponse(fournisseur);
     }
 
     public void deleteFournisseur (Long idFournisseur){
