@@ -8,6 +8,7 @@ import com.globalshopper.GlobalShopper.entity.enums.OrderStatus;
 import com.globalshopper.GlobalShopper.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -24,10 +25,14 @@ public class CommandeGroupeeService {
     private final ProduitRepository produitRepository;
     private final PayementService payementService;
     private final FournisseurRepository fournisseurRepository;
+    private final SimpMessagingTemplate messagingTemplate;
+    private final NotificationRepository notificationRepository;
 
     public CommandeGroupeeService(CommandeGroupeeRepository commandeGroupeeRepository, CommercantRepository commercantRepository,
                                   ParticipationRepository participationRepository, ProduitRepository produitRepository,
-                                  PayementService payementService, FournisseurRepository fournisseurRepository)
+                                  PayementService payementService, FournisseurRepository fournisseurRepository,
+                                  SimpMessagingTemplate messagingTemplate,NotificationRepository notificationRepository
+    )
     {
         this.commandeGroupeeRepository = commandeGroupeeRepository;
         this.commercantRepository = commercantRepository;
@@ -35,6 +40,8 @@ public class CommandeGroupeeService {
         this.produitRepository = produitRepository;
         this.payementService = payementService;
         this.fournisseurRepository = fournisseurRepository;
+        this.messagingTemplate = messagingTemplate;
+        this.notificationRepository = notificationRepository;
     }
 
     @Transactional
@@ -105,6 +112,15 @@ public class CommandeGroupeeService {
         commandeGroupee.getParticipations().add(participation);
 
         commandeGroupeeRepository.save(commandeGroupee); // Sauvegarde finale des mises à jour
+
+        Notification notification = new Notification();
+
+        notification.setTitre("Creation de commande Groupée");
+        notification.setMessage("Votre commande groupée du produit : " + produit.getNom() + " a été crée avec succes.");
+
+        notificationRepository.save(notification);
+
+        messagingTemplate.convertAndSend("/topic/orders", notification);
 
         return CommandeGroupeeMapper.toResponse(commandeGroupee);
     }
@@ -178,6 +194,15 @@ public class CommandeGroupeeService {
 
         commandeGroupeeRepository.save(commandeGroupee);
         participationRepository.save(participation);
+
+        Notification notification = new Notification();
+
+        notification.setTitre("Adhesion a la commande Groupée");
+        notification.setMessage("Vous avez rejoin la commande groupée du produit : " + produit.getNom() + " avec succes.");
+
+        notificationRepository.save(notification);
+
+        messagingTemplate.convertAndSend("/topic/orders", notification);
 
         return CommandeGroupeeMapper.toResponse(commandeGroupee);
     }
