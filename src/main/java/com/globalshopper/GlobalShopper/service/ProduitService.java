@@ -1,8 +1,11 @@
 package com.globalshopper.GlobalShopper.service;
 
+import com.globalshopper.GlobalShopper.dto.mapper.CommandeGroupeeMapper;
 import com.globalshopper.GlobalShopper.dto.mapper.ProduitMapper;
 import com.globalshopper.GlobalShopper.dto.request.CaracteristiqueDTO;
 import com.globalshopper.GlobalShopper.dto.request.ProduitRequestDTO;
+import com.globalshopper.GlobalShopper.dto.response.CommandeGroupeeResponseDTO;
+import com.globalshopper.GlobalShopper.dto.response.ParticipationResponseDTO;
 import com.globalshopper.GlobalShopper.dto.response.ProduitResponseDTO;
 import com.globalshopper.GlobalShopper.entity.*;
 import com.globalshopper.GlobalShopper.repository.*;
@@ -150,6 +153,27 @@ public class ProduitService {
         return ProduitMapper.toResponse(produit);
     }
 
+    public CommandeGroupeeResponseDTO getParticipationCommande(long id) {
+        // 1. Récupération du Produit (Entité ou DTO)
+        Produit produit = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Produit introuvable"));
+
+        ProduitResponseDTO produitResponseDTO = ProduitMapper.toResponse(produit);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long commercantId = Long.valueOf(authentication.getPrincipal().toString());
+
+
+        return CommandeGroupeeMapper.toResponse( produitResponseDTO.commandeGroupees().stream()
+                // a) Filtrer les commandes qui contiennent une participation de l'utilisateur
+                .filter(commande -> commande.getParticipations().stream()
+                        .anyMatch(participation ->
+                                participation.getCommercant() != null &&
+                                        participation.getCommercant().getId() == commercantId
+                        )
+                )
+                .findFirst().orElse(null)
+        );
+    }
     //get A Produict
     public ProduitResponseDTO updateProduct(Long id , ProduitRequestDTO produitRequestDTO){
         Produit produit = repository.findById(id).orElseThrow(()-> new EntityNotFoundException("Produit introuvable"));

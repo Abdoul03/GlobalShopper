@@ -3,6 +3,7 @@ package com.globalshopper.GlobalShopper.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.globalshopper.GlobalShopper.dto.request.ProduitRequestDTO;
+import com.globalshopper.GlobalShopper.dto.response.CommandeGroupeeResponseDTO;
 import com.globalshopper.GlobalShopper.dto.response.ProduitResponseDTO;
 import com.globalshopper.GlobalShopper.service.ProduitService;
 import org.springframework.http.HttpStatus;
@@ -52,6 +53,11 @@ public class ProduitController {
     @GetMapping("/{id}")
     public ResponseEntity<ProduitResponseDTO> getAnProduit(@PathVariable Long id){
         return ResponseEntity.ok(produitService.getAProduict(id));
+    }
+
+    @GetMapping("/{produitId}/participation-utilisateur")
+    public ResponseEntity<CommandeGroupeeResponseDTO> getCommercantParticipation(@PathVariable Long produitId){
+        return ResponseEntity.ok(produitService.getParticipationCommande(produitId));
     }
 
     @PutMapping("/{id}")

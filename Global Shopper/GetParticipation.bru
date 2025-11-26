@@ -1,0 +1,20 @@
+meta {
+  name: GetParticipation
+  type: http
+  seq: 27
+}
+
+get {
+  url: http://localhost:8080/api/produits/1/participation-utilisateur
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0IiwidHlwZSI6IkFDQ0VTU19UT0tFTiIsInJvbGUiOiJST0xFX0NPTU1FUkNBTlQiLCJpYXQiOjE3NjQxNTI4NjcsImV4cCI6MTc2NDE1Mzc2N30.uN9ASad5pYJMewZw9xxwWH42Lpu-hgiG0ed9qWscBZU
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
