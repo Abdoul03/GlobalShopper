@@ -81,7 +81,7 @@ public class Media {
 
     @Transient // <-- pas stocké dans la base
     public String getWebPath() {
-        String basePath = "/Users/tuwindi/Desktop/uploads/";
+        String basePath = "/root/Desktop/uploads/";
         if (filePath != null && filePath.startsWith(basePath)) {
             // On retire la partie du chemin local et on remplace par /images/
             return "/images/" + filePath.substring(basePath.length());
