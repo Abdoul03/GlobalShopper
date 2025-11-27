@@ -12,7 +12,7 @@ public class webConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // Toutes les requêtes /images/** pointeront vers le dossier physique
         registry.addResourceHandler("/images/**")
-                .addResourceLocations("file:/Users/tuwindi/Desktop/uploads/");
+                .addResourceLocations("file:/root/Desktop/uploads/");
 
     }
 
