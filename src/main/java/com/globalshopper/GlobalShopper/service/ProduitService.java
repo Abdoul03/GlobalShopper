@@ -158,6 +158,9 @@ public class ProduitService {
     public CommandeGroupeeResponseDTO getLastOrder(long id){
         Produit produit  = repository.findById(id).orElseThrow(()-> new EntityNotFoundException("Produit introuvable"));
         List<CommandeGroupee> commandeGroupee = produit.getCommandeGroupees();
+        if(commandeGroupee == null || commandeGroupee.isEmpty() ){
+            return null;
+        }
         CommandeGroupee lastCommande = commandeGroupee.getLast();
         return CommandeGroupeeMapper.toResponse(lastCommande);
     }
