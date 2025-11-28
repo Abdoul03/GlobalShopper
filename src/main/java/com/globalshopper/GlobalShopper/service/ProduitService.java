@@ -153,6 +153,15 @@ public class ProduitService {
         return ProduitMapper.toResponse(produit);
     }
 
+
+    //Get last commande By produit
+    public CommandeGroupeeResponseDTO getLastOrder(long id){
+        Produit produit  = repository.findById(id).orElseThrow(()-> new EntityNotFoundException("Produit introuvable"));
+        List<CommandeGroupee> commandeGroupee = produit.getCommandeGroupees();
+        CommandeGroupee lastCommande = commandeGroupee.getLast();
+        return CommandeGroupeeMapper.toResponse(lastCommande);
+    }
+
     public CommandeGroupeeResponseDTO getParticipationCommande(long id) {
         // 1. Récupération du Produit (Entité ou DTO)
         Produit produit = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Produit introuvable"));
