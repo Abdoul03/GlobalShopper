@@ -60,6 +60,11 @@ public class ProduitController {
         return ResponseEntity.ok(produitService.getParticipationCommande(produitId));
     }
 
+    @GetMapping("/last/{id}")
+    public ResponseEntity<CommandeGroupeeResponseDTO> getLastCommande(@PathVariable long id){
+        return ResponseEntity.ok(produitService.getLastOrder(id));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ProduitResponseDTO> updateProduct(@PathVariable Long id, @RequestPart("produit") String produitRequest) throws JsonProcessingException {
         ProduitRequestDTO dto = objectMapper.readValue(produitRequest, ProduitRequestDTO.class);

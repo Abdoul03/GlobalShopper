@@ -5,11 +5,16 @@ meta {
 }
 
 get {
-  url: http://localhost:8080/api/uploads/produits/1/43c25960-6f89-405f-a798-ef78161b5052_IMG_0135%202.jpg
+  url: https://globalshopper.onrender.com/api/images/produits/2/eb6ae08c-404a-4fef-9de1-3958587dd178_image_picker_BCD46241-A81B-44AC-B78D-58553D1CC245-22434-000004DD2E293C56.jpg
   body: none
-  auth: inherit
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwidHlwZSI6IkFDQ0VTU19UT0tFTiIsInJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzY0MjQzNDkxLCJleHAiOjE3NjQyNDQzOTF9.Wi_H5pNl_lgteEB3sdCPYrOPollKo_xN7sSHNgNEgBY
 }
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

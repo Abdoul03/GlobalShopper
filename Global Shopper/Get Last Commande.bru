@@ -1,11 +1,11 @@
 meta {
-  name: Get All Contry
+  name: Get Last Commande
   type: http
   seq: 7
 }
 
 get {
-  url: {{baseUrl}}/admin/pays/1
+  url: http://localhost:8080/api/produits/last/4
   body: json
   auth: bearer
 }
@@ -15,9 +15,10 @@ headers {
 }
 
 auth:bearer {
-  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwidHlwZSI6IkFDQ0VTU19UT0tFTiIsInJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzYwNjEwMDE1LCJleHAiOjE3NjA2MTA5MTV9.UsAw6b8B6uhhIctxXdiNeGKjiIix1D8fbvIsgELnzGI
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwidHlwZSI6IkFDQ0VTU19UT0tFTiIsInJvbGUiOiJST0xFX0NPTU1FUkNBTlQiLCJpYXQiOjE3NjQzMjc5NDUsImV4cCI6MTc2NDMyODg0NX0.yjrFx0PsoG3btGwJqNO4tdEwwwGrYNhbibPT_4Kzf0s
 }
 
 settings {
   encodeUrl: true
+  timeout: 0
 }
