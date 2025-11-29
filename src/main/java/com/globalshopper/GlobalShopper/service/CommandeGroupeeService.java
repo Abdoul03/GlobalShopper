@@ -117,6 +117,7 @@ public class CommandeGroupeeService {
 
         notification.setTitre("Creation de commande Groupée");
         notification.setMessage("Votre commande groupée du produit : " + produit.getNom() + " a été crée avec succes.");
+        notification.setCommercant(commercant);
 
         notificationRepository.save(notification);
 
@@ -199,6 +200,7 @@ public class CommandeGroupeeService {
 
         notification.setTitre("Adhesion a la commande Groupée");
         notification.setMessage("Vous avez rejoin la commande groupée du produit : " + produit.getNom() + " avec succes.");
+        notification.setCommercant(commercant);
 
         notificationRepository.save(notification);
 
@@ -211,9 +213,6 @@ public class CommandeGroupeeService {
     public CommandeGroupeeResponseDTO retirerParticipation(int commandeId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long commercantId = Long.valueOf(authentication.getPrincipal().toString());
-
-        Commercant commercant = commercantRepository.findById(commercantId)
-                .orElseThrow(() -> new EntityNotFoundException("Commerçant introuvable"));
 
         CommandeGroupee commande = commandeGroupeeRepository.findById(commandeId)
                 .orElseThrow(() -> new EntityNotFoundException("Commande groupée introuvable"));

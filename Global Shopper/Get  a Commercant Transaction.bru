@@ -1,0 +1,20 @@
+meta {
+  name: Get  a Commercant Transaction
+  type: http
+  seq: 31
+}
+
+get {
+  url: http://localhost:8080/api/transaction/commercant
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwidHlwZSI6IkFDQ0VTU19UT0tFTiIsInJvbGUiOiJST0xFX0NPTU1FUkNBTlQiLCJpYXQiOjE3NjQ0NDk3MjYsImV4cCI6MTc2NDQ1MDYyNn0.pSTjyD-_d4BmuhihV15dmXc-yasUJLdZ_EoI8qdQevo
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

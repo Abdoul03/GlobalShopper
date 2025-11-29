@@ -15,9 +15,10 @@ import java.util.List;
 @Entity
 public class Commercant extends Utilisateur {
 
-    public Commercant(List<Participation> participation, List<CommandeGroupee> commandeGroupees) {
+    public Commercant(List<Participation> participation, List<CommandeGroupee> commandeGroupees, List<Notification> notifications) {
         this.participation = participation;
         this.commandeGroupees = commandeGroupees;
+        this.notifications = notifications;
     }
 
     public Commercant(){
@@ -31,6 +32,8 @@ public class Commercant extends Utilisateur {
     @OneToMany(mappedBy = "commercant", cascade = CascadeType.ALL,orphanRemoval = true)
     @JsonManagedReference("commercant-participation")
     private List<Participation> participation;
+    @OneToMany
+    private List<Notification> notifications;
 
     public List<Participation> getParticipation() {
         return participation;
@@ -46,5 +49,13 @@ public class Commercant extends Utilisateur {
 
     public void setCommandeGroupees(List<CommandeGroupee> commandeGroupees) {
         this.commandeGroupees = commandeGroupees;
+    }
+
+    public List<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
     }
 }
