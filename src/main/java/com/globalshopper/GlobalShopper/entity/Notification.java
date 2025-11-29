@@ -1,10 +1,7 @@
 package com.globalshopper.GlobalShopper.entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Notification {
@@ -13,11 +10,14 @@ public class Notification {
     private long id;
     private String titre;
     private String message;
+    @ManyToOne
+    private Commercant commercant;
 
-    public Notification(long id, String titre, String message) {
+    public Notification(long id, String titre, String message, Commercant commercant) {
         this.id = id;
         this.titre = titre;
         this.message = message;
+        this.commercant = commercant;
     }
 
     public Notification() {
@@ -45,5 +45,13 @@ public class Notification {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public Commercant getCommercant() {
+        return commercant;
+    }
+
+    public void setCommercant(Commercant commercant) {
+        this.commercant = commercant;
     }
 }
