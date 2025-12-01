@@ -233,16 +233,14 @@ public class CommandeGroupeeService {
         commande.setMontant(commande.getMontant() - participation.getMontant());
         commande.getParticipations().remove(participation);
 
-        participationRepository.delete(participation);
-
         // Si plus de participants
         if (commande.getParticipations().isEmpty()) {
             commande.setStatus(OrderStatus.ANNULER);
         }
 
-        commandeGroupeeRepository.save(commande);
+        var c =  commandeGroupeeRepository.save(commande);
 
-        return CommandeGroupeeMapper.toResponse(commande);
+        return CommandeGroupeeMapper.toResponse(c);
     }
 
     public List<CommandeGroupeeResponseDTO> getAllCommandeGrouper(){
