@@ -1,6 +1,8 @@
 package com.globalshopper.GlobalShopper.service;
 
 import com.globalshopper.GlobalShopper.dto.mapper.CommandeGroupeeMapper;
+import com.globalshopper.GlobalShopper.dto.request.CommandeGroupeeRequestDTO;
+import com.globalshopper.GlobalShopper.dto.request.CommercantRequestDTO;
 import com.globalshopper.GlobalShopper.dto.request.ParticipationRequestDTO;
 import com.globalshopper.GlobalShopper.dto.response.CommandeGroupeeResponseDTO;
 import com.globalshopper.GlobalShopper.entity.*;
@@ -296,6 +298,19 @@ public class CommandeGroupeeService {
             }
         }
         return commandes.stream().map(CommandeGroupeeMapper :: toResponse).toList();
+    }
+
+    public CommandeGroupeeResponseDTO modifierLeDeadLineDuCommande(long commercantId, CommandeGroupeeRequestDTO commande){
+        CommandeGroupee commandeGroupee = commandeGroupeeRepository.findByCommercantId(commercantId).orElseThrow(
+                ()-> new EntityNotFoundException("Commande introuvable"));
+
+        commandeGroupee.setDeadline(commande.deadline());
+        commandeGroupee.setStatus(OrderStatus.ENCOURS);
+
+        var commandeModifier = commandeGroupeeRepository.save(commandeGroupee);
+
+        return CommandeGroupeeMapper.toResponse(commandeModifier);
+
     }
 
 }
