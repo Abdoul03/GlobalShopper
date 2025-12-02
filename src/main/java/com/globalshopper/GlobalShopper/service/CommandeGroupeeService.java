@@ -313,4 +313,26 @@ public class CommandeGroupeeService {
 
     }
 
+    @Transactional
+    public void annulerCommandeApresDeadline(long commercantId){
+        CommandeGroupee commandeGroupee = commandeGroupeeRepository.findByCommercantId(commercantId).orElseThrow(
+                ()-> new EntityNotFoundException("Commande introuvable")
+        );
+
+        List<Participation> tousLesParticipations = commandeGroupee.getParticipations();
+
+        for (Participation participation1 : tousLesParticipations){
+            try{
+                payementService.rembourserParticipation(participation1);
+                participationRepository.delete(participation1);
+            }catch (Exception e){
+                throw new RuntimeException("Échec critique lors de l'annulation (remboursement échoué) : " + e.getMessage());
+            }
+        }
+
+        commandeGroupee.setStatus(OrderStatus.ANNULER);
+
+        commandeGroupeeRepository.save(commandeGroupee);
+    }
+
 }
