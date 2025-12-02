@@ -10,14 +10,14 @@ public class Notification {
     private long id;
     private String titre;
     private String message;
-    @ManyToOne
-    private Commercant commercant;
+//    @ManyToOne
+//    private Commercant commercant;
 
     public Notification(long id, String titre, String message, Commercant commercant) {
         this.id = id;
         this.titre = titre;
         this.message = message;
-        this.commercant = commercant;
+//        this.commercant = commercant;
     }
 
     public Notification() {
@@ -47,11 +47,11 @@ public class Notification {
         this.message = message;
     }
 
-    public Commercant getCommercant() {
-        return commercant;
-    }
-
-    public void setCommercant(Commercant commercant) {
-        this.commercant = commercant;
-    }
+//    public Commercant getCommercant() {
+//        return commercant;
+//    }
+//
+//    public void setCommercant(Commercant commercant) {
+//        this.commercant = commercant;
+//    }
 }

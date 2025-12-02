@@ -119,7 +119,7 @@ public class CommandeGroupeeService {
 
         notification.setTitre("Creation de commande Groupée");
         notification.setMessage("Votre commande groupée du produit : " + produit.getNom() + " a été crée avec succes.");
-        notification.setCommercant(commercant);
+//        notification.setCommercant(commercant.getId());
 
         notificationRepository.save(notification);
 
@@ -202,7 +202,7 @@ public class CommandeGroupeeService {
 
         notification.setTitre("Adhesion a la commande Groupée");
         notification.setMessage("Vous avez rejoin la commande groupée du produit : " + produit.getNom() + " avec succes.");
-        notification.setCommercant(commercant);
+//        notification.setCommercant(commercant);
 
         notificationRepository.save(notification);
 
