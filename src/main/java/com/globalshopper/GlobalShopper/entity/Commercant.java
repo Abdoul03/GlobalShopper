@@ -18,7 +18,7 @@ public class Commercant extends Utilisateur {
     public Commercant(List<Participation> participation, List<CommandeGroupee> commandeGroupees, List<Notification> notifications) {
         this.participation = participation;
         this.commandeGroupees = commandeGroupees;
-        this.notifications = notifications;
+//        this.notifications = notifications;
     }
 
     public Commercant(){
@@ -32,8 +32,8 @@ public class Commercant extends Utilisateur {
     @OneToMany(mappedBy = "commercant", cascade = CascadeType.ALL,orphanRemoval = true)
     @JsonManagedReference("commercant-participation")
     private List<Participation> participation;
-    @OneToMany
-    private List<Notification> notifications;
+//    @OneToMany
+//    private List<Notification> notifications;
 
     public List<Participation> getParticipation() {
         return participation;
@@ -51,11 +51,11 @@ public class Commercant extends Utilisateur {
         this.commandeGroupees = commandeGroupees;
     }
 
-    public List<Notification> getNotifications() {
-        return notifications;
-    }
-
-    public void setNotifications(List<Notification> notifications) {
-        this.notifications = notifications;
-    }
+//    public List<Notification> getNotifications() {
+//        return notifications;
+//    }
+//
+//    public void setNotifications(List<Notification> notifications) {
+//        this.notifications = notifications;
+//    }
 }

@@ -1,0 +1,20 @@
+meta {
+  name: Retire un utilisateur dans un commande
+  type: http
+  seq: 32
+}
+
+post {
+  url: {{baseUrl}}/commandeGroupee/remove/2
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwidHlwZSI6IkFDQ0VTU19UT0tFTiIsInJvbGUiOiJST0xFX0NPTU1FUkNBTlQiLCJpYXQiOjE3NjQ2MDI1NjUsImV4cCI6MTc2NDYwMzQ2NX0.2RMrsd-gnKtyS9r7ZAkdurHyL55Fu-5VWZp1o8-sYnw
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,8 +1,10 @@
 package com.globalshopper.GlobalShopper.controller;
 
+import com.globalshopper.GlobalShopper.dto.request.CommandeGroupeeRequestDTO;
 import com.globalshopper.GlobalShopper.dto.request.ParticipationRequestDTO;
 import com.globalshopper.GlobalShopper.dto.response.CommandeGroupeeResponseDTO;
 import com.globalshopper.GlobalShopper.service.CommandeGroupeeService;
+import org.eclipse.angus.mail.iap.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,6 +43,17 @@ public class CommandeGrooupeeController {
             @PathVariable int commandeId
     ){
         return ResponseEntity.ok(commandeGroupeeService.retirerParticipation(commandeId));
+    }
+
+    @PostMapping("editeDeadLine/{commercantId}")
+    public ResponseEntity<CommandeGroupeeResponseDTO> modifierDeadLine(
+            @PathVariable long commercantId, @RequestBody CommandeGroupeeRequestDTO commande){
+        return ResponseEntity.ok(commandeGroupeeService.modifierLeDeadLineDuCommande(commercantId, commande));
+    }
+
+    @PostMapping("cancelOrder/{commercantId}")
+    public void annulerLaCommadeApresDeadLine (@PathVariable long commercantId) {
+        commandeGroupeeService.annulerCommandeApresDeadline(commercantId);
     }
 
     @GetMapping("commercant/all/{commercantId}")

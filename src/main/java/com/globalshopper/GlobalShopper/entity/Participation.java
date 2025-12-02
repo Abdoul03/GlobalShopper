@@ -28,7 +28,7 @@ public class Participation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int Id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JsonBackReference("commercant-participation")
     @JoinColumn(name = "Commercant_id")
     private Commercant commercant;

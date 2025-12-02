@@ -1,6 +1,8 @@
 package com.globalshopper.GlobalShopper.service;
 
 import com.globalshopper.GlobalShopper.dto.mapper.CommandeGroupeeMapper;
+import com.globalshopper.GlobalShopper.dto.request.CommandeGroupeeRequestDTO;
+import com.globalshopper.GlobalShopper.dto.request.CommercantRequestDTO;
 import com.globalshopper.GlobalShopper.dto.request.ParticipationRequestDTO;
 import com.globalshopper.GlobalShopper.dto.response.CommandeGroupeeResponseDTO;
 import com.globalshopper.GlobalShopper.entity.*;
@@ -117,7 +119,7 @@ public class CommandeGroupeeService {
 
         notification.setTitre("Creation de commande Groupée");
         notification.setMessage("Votre commande groupée du produit : " + produit.getNom() + " a été crée avec succes.");
-        notification.setCommercant(commercant);
+//        notification.setCommercant(commercant.getId());
 
         notificationRepository.save(notification);
 
@@ -200,7 +202,7 @@ public class CommandeGroupeeService {
 
         notification.setTitre("Adhesion a la commande Groupée");
         notification.setMessage("Vous avez rejoin la commande groupée du produit : " + produit.getNom() + " avec succes.");
-        notification.setCommercant(commercant);
+//        notification.setCommercant(commercant);
 
         notificationRepository.save(notification);
 
@@ -233,16 +235,14 @@ public class CommandeGroupeeService {
         commande.setMontant(commande.getMontant() - participation.getMontant());
         commande.getParticipations().remove(participation);
 
-        participationRepository.delete(participation);
-
         // Si plus de participants
         if (commande.getParticipations().isEmpty()) {
             commande.setStatus(OrderStatus.ANNULER);
         }
 
-        commandeGroupeeRepository.save(commande);
+        var c =  commandeGroupeeRepository.save(commande);
 
-        return CommandeGroupeeMapper.toResponse(commande);
+        return CommandeGroupeeMapper.toResponse(c);
     }
 
     public List<CommandeGroupeeResponseDTO> getAllCommandeGrouper(){
@@ -298,6 +298,41 @@ public class CommandeGroupeeService {
             }
         }
         return commandes.stream().map(CommandeGroupeeMapper :: toResponse).toList();
+    }
+
+    public CommandeGroupeeResponseDTO modifierLeDeadLineDuCommande(long commercantId, CommandeGroupeeRequestDTO commande){
+        CommandeGroupee commandeGroupee = commandeGroupeeRepository.findByCommercantId(commercantId).orElseThrow(
+                ()-> new EntityNotFoundException("Commande introuvable"));
+
+        commandeGroupee.setDeadline(commande.deadline());
+        commandeGroupee.setStatus(OrderStatus.ENCOURS);
+
+        var commandeModifier = commandeGroupeeRepository.save(commandeGroupee);
+
+        return CommandeGroupeeMapper.toResponse(commandeModifier);
+
+    }
+
+    @Transactional
+    public void annulerCommandeApresDeadline(long commercantId){
+        CommandeGroupee commandeGroupee = commandeGroupeeRepository.findByCommercantId(commercantId).orElseThrow(
+                ()-> new EntityNotFoundException("Commande introuvable")
+        );
+
+        List<Participation> tousLesParticipations = commandeGroupee.getParticipations();
+
+        for (Participation participation1 : tousLesParticipations){
+            try{
+                payementService.rembourserParticipation(participation1);
+                commandeGroupee.getParticipations().remove(participation1);
+            }catch (Exception e){
+                throw new RuntimeException("Échec critique lors de l'annulation (remboursement échoué) : " + e.getMessage());
+            }
+        }
+
+        commandeGroupee.setStatus(OrderStatus.ANNULER);
+
+        commandeGroupeeRepository.save(commandeGroupee);
     }
 
 }

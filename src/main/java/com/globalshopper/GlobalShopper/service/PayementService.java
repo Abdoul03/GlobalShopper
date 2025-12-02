@@ -136,19 +136,22 @@ public class PayementService {
     @Transactional
     public Transaction rembourserParticipation(Participation participation) {
         try {
-            Transaction remboursement = new Transaction();
-            remboursement.setMontant(participation.getMontant());
+            Transaction remboursement = participation.getTransaction();
+//            remboursement.setMontant(participation.getMontant());
             remboursement.setTransactionType(TransactionType.REMBOURSEMENT);
             remboursement.setMethodeDePayement(MethodeDePayement.ORANGE_MONEY);
-            remboursement.setParticipation(participation);
+//            remboursement.setParticipation(participation);
             remboursement.setDate(LocalDate.now());
 
-            transactionRepository.save(remboursement);
+
+            transactionRepository.delete(remboursement);
 
             // Met à jour le wallet (argent retourné au commerçant)
 //            Wallet wallet = walletRepository.findByCommercant(participation.getCommercant())
 //                    .orElse(new Wallet());
-            Wallet wallet = walletRepository.findById(remboursement.getWallet().getId()).orElseThrow(()-> new EntityNotFoundException("wallet introuvable"));
+            // 2. Récupérer le Wallet du système
+            Wallet wallet = walletRepository.findSystemWallet()
+                    .orElseThrow(() -> new RuntimeException("Wallet du système introuvable."));
             wallet.setMontant(wallet.getMontant() - remboursement.getMontant());
             wallet.setStatut(Statut.EFFECTUER);
             wallet.setMiseAjour(LocalDate.now());
