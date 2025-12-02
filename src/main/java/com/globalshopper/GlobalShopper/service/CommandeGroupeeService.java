@@ -324,7 +324,7 @@ public class CommandeGroupeeService {
         for (Participation participation1 : tousLesParticipations){
             try{
                 payementService.rembourserParticipation(participation1);
-                participationRepository.delete(participation1);
+                commandeGroupee.getParticipations().remove(participation1);
             }catch (Exception e){
                 throw new RuntimeException("Échec critique lors de l'annulation (remboursement échoué) : " + e.getMessage());
             }
