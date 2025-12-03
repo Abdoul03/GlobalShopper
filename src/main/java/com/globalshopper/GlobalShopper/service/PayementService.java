@@ -135,36 +135,45 @@ public class PayementService {
 
     @Transactional
     public Transaction rembourserParticipation(Participation participation) {
-        try {
-            Transaction remboursement = participation.getTransaction();
-//            remboursement.setMontant(participation.getMontant());
-            remboursement.setTransactionType(TransactionType.REMBOURSEMENT);
-            remboursement.setMethodeDePayement(MethodeDePayement.ORANGE_MONEY);
-//            remboursement.setParticipation(participation);
-            remboursement.setDate(LocalDate.now());
 
-
-            transactionRepository.delete(remboursement);
-
-            // Met à jour le wallet (argent retourné au commerçant)
-//            Wallet wallet = walletRepository.findByCommercant(participation.getCommercant())
-//                    .orElse(new Wallet());
-            // 2. Récupérer le Wallet du système
-            Wallet wallet = walletRepository.findSystemWallet()
-                    .orElseThrow(() -> new RuntimeException("Wallet du système introuvable."));
-            wallet.setMontant(wallet.getMontant() - remboursement.getMontant());
-            wallet.setStatut(Statut.EFFECTUER);
-            wallet.setMiseAjour(LocalDate.now());
-
-            walletRepository.save(wallet);
-
-            return remboursement;
-
-        } catch (Exception e) {
-            throw new RuntimeException("Échec du remboursement : " + e.getMessage());
+        if (participation == null) {
+            throw new IllegalArgumentException("Participation invalide");
         }
-    }
 
+        Transaction transaction = participation.getTransaction();
+
+        // Vérification de cohérence : il doit exister une réservation valide
+        if (transaction == null
+                || transaction.getTransactionType() != TransactionType.RESERVATION
+                || transaction.getStatut() != Statut.EFFECTUER)
+        {
+            throw new RuntimeException("Impossible de rembourser : aucune réservation valide.");
+        }
+
+        // --- 1. Mise à jour de la transaction existante ---
+        transaction.setTransactionType(TransactionType.REMBOURSEMENT);
+        transaction.setStatut(Statut.EFFECTUER);
+        transaction.setDate(LocalDate.now());
+        transaction.setMethodeDePayement(MethodeDePayement.ORANGE_MONEY);
+
+        transactionRepository.save(transaction);
+
+        // --- 2. Mise à jour du Wallet ---
+        Wallet wallet = walletRepository.findSystemWallet()
+                .orElseThrow(() -> new RuntimeException("Wallet du système introuvable."));
+
+        // Vérifier que le wallet a assez de fonds pour rembourser
+        if (wallet.getMontant() < transaction.getMontant()) {
+            throw new RuntimeException("Fonds insuffisants pour effectuer le remboursement.");
+        }
+
+        wallet.setMontant(wallet.getMontant() - transaction.getMontant());
+        wallet.setMiseAjour(LocalDate.now());
+
+        walletRepository.save(wallet);
+
+        return transaction;
+    }
     /**
      * Simulation aléatoire d’un paiement.
      * Par exemple, 90% de réussite.
