@@ -4,6 +4,7 @@ package com.globalshopper.GlobalShopper.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.globalshopper.GlobalShopper.entity.enums.ParticipationStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,7 +12,7 @@ import java.time.LocalDate;
 
 @Entity
 public class Participation {
-    public Participation(int id, Commercant commercant, CommandeGroupee commandeGroupee, LocalDate data, int quantite, double montant, Transaction transaction) {
+    public Participation(int id, Commercant commercant, CommandeGroupee commandeGroupee, LocalDate data, int quantite, double montant, Transaction transaction, ParticipationStatus status) {
         Id = id;
         this.commercant = commercant;
         this.commandeGroupee = commandeGroupee;
@@ -19,6 +20,7 @@ public class Participation {
         this.quantite = quantite;
         this.montant = montant;
         this.transaction = transaction;
+        this.status = status;
     }
     public Participation(){
 
@@ -45,6 +47,9 @@ public class Participation {
     @OneToOne(mappedBy = "participation")
     @JsonManagedReference("participation-transaction")
     private Transaction transaction;
+
+    @Enumerated(EnumType.STRING)
+    private ParticipationStatus status = ParticipationStatus.ACTIVE;
 
     public int getId() {
         return Id;
@@ -100,5 +105,13 @@ public class Participation {
 
     public void setTransaction(Transaction transaction) {
         this.transaction = transaction;
+    }
+
+    public ParticipationStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ParticipationStatus status) {
+        this.status = status;
     }
 }

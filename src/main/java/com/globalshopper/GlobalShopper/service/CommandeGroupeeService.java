@@ -7,10 +7,12 @@ import com.globalshopper.GlobalShopper.dto.request.ParticipationRequestDTO;
 import com.globalshopper.GlobalShopper.dto.response.CommandeGroupeeResponseDTO;
 import com.globalshopper.GlobalShopper.entity.*;
 import com.globalshopper.GlobalShopper.entity.enums.OrderStatus;
+import com.globalshopper.GlobalShopper.entity.enums.ParticipationStatus;
 import com.globalshopper.GlobalShopper.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -230,10 +232,13 @@ public class CommandeGroupeeService {
         // Créer une transaction de remboursement
         payementService.rembourserParticipation(participation);
 
+        participation.setStatus(ParticipationStatus.ANNULEE);
+        commande.getParticipations().remove(participation);
+
         // Mettre à jour la commande
         commande.setQuaniteActuelle(commande.getQuaniteActuelle() - participation.getQuantite());
         commande.setMontant(commande.getMontant() - participation.getMontant());
-        commande.getParticipations().remove(participation);
+
 
         // Si plus de participants
         if (commande.getParticipations().isEmpty()) {
@@ -333,6 +338,61 @@ public class CommandeGroupeeService {
         commandeGroupee.setStatus(OrderStatus.ANNULER);
 
         commandeGroupeeRepository.save(commandeGroupee);
+    }
+
+
+    @Scheduled(cron = "0 35 1 * * *") // Chaque jour à minuit
+    @Transactional // Nécessaire pour que toutes les opérations (remboursement/sauvegarde) soient atomiques
+    public void annulerCommandesDateLimiteDepassee() {
+        // Définir la date d'aujourd'hui pour la comparaison
+        LocalDate today = LocalDate.now();
+
+        // 1. Trouver toutes les commandes qui sont ENCOURS ET dont le deadline est passé
+        List<CommandeGroupee> commandesAAnnuler = commandeGroupeeRepository
+                .findByStatusAndDeadlineBefore(OrderStatus.ENCOURS, today);
+
+        // Si nous utilisons la logique de prolongation (EN_ATTENTE_PROLONGATION) :
+        // List<CommandeGroupee> commandesAAnnuler = commandeGroupeeRepository
+        //     .findByStatusInAndDeadlineBefore(
+        //          Arrays.asList(OrderStatus.ENCOURS, OrderStatus.EN_ATTENTE_PROLONGATION),
+        //          today
+        //     );
+
+
+        if (commandesAAnnuler.isEmpty()) {
+            System.out.println("Aucune commande à annuler automatiquement.");
+            return;
+        }
+
+        System.out.println("Début de l'annulation de " + commandesAAnnuler.size() + " commandes.");
+
+        // 2. Traiter chaque commande
+        for (CommandeGroupee commande : commandesAAnnuler) {
+            try {
+                // Annulation et remboursement des participants
+                processerAnnulationEtRemboursement(commande);
+
+            } catch (Exception e) {
+                // En cas d'échec critique (ex: échec du remboursement pour l'une des participations)
+                System.err.println("Échec de l'annulation et du remboursement pour la commande ID: "
+                        + commande.getId() + ". Erreur: " + e.getMessage());
+                // La transaction sera annulée (rollback) pour cette commande si @Transactional est bien configuré.
+            }
+        }
+        System.out.println("Processus d'annulation automatique terminé.");
+    }
+
+    private void processerAnnulationEtRemboursement(CommandeGroupee commande) {
+        //Rembourser tous les participants
+        List<Participation> participations = commande.getParticipations();
+        for (Participation participation : participations) {
+            payementService.rembourserParticipation(participation);
+        }
+
+        commande.setStatus(OrderStatus.ANNULER); // Ou OrderStatus.ANNULER_AUTO
+        commandeGroupeeRepository.save(commande);
+
+        System.out.println("Commande ID: " + commande.getId() + " annulée et remboursée avec succès.");
     }
 
 }
